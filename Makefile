@@ -5,8 +5,7 @@ prefix=/usr/local
 INSTALL:=install
 INSTALL_PROGRAM:=$(INSTALL)
 
-mybin:
-	touch mybin
+mybin: mybin.c
 
 .PHONY: clean
 clean:
