@@ -8,3 +8,5 @@ apt-get build-dep --no-install-recommends --yes ./
 
 dpkg-buildpackage "$@"
 
+mv ../*.deb .
+
