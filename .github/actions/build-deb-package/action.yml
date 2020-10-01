@@ -20,7 +20,7 @@ runs:
       shell: sh
     - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --entrypoint /usr/bin/env build-deb-package
       shell: sh
-    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" build-deb-package ${{ inputs.args }}
+    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" -e DEB_CHECK_COMMAND -e DEB_SIGN_KEYID -e DEB_BUILD_OPTIONS -e DEB_BUILD_PROFILES -e DPKG_COLORS -e DPKG_NLS build-deb-package ${{ inputs.args }}
       shell: sh
 branding:
   icon: 'package'
