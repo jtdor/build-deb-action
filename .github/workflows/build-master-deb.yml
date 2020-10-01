@@ -1,7 +1,4 @@
-on:
-  push:
-    branches:
-      - build-deb-package
+on: push
 
 jobs:
   build-deb:
