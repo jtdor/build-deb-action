@@ -13,4 +13,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: 'Debian packages'
-          path: ../*.deb
+          path: ${{ env.HOME }}/*.deb
