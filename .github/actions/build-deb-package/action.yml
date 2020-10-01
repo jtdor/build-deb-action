@@ -16,7 +16,7 @@ runs:
   steps:
     - run: env
       shell: sh
-    - run: docker build -t build-deb-package --build-arg=BUILD_FROM=${{ inputs.docker-image }} .
+    - run: docker build -t build-deb-package --build-arg=BUILD_FROM="${{ inputs.docker-image }}" "$GITHUB_ACTION_PATH"
       shell: sh
     - run: docker run --rm -v"$GITHUB_ACTION_PATH":/workspace --workdir /workspace --entrypoint /usr/bin/env build-deb-package
       shell: sh
