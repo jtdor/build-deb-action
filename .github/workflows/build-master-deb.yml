@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - build-deb-package
 
 jobs:
   build-deb:
@@ -9,12 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: singingwolfboy/build-dpkg-buster@v1
-        id: build
+      - uses: .github/actions/build-deb-package
         with:
           args: --no-sign
 
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.build.outputs.filename }}
-          path: ${{ steps.build.outputs.filename }}
+          name: 'Debian packages'
+          path: ../*.deb

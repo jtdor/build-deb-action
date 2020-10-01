@@ -1,0 +1,11 @@
+author: 'Jörn-Thorben Hinz'
+name: 'Build a Debian package'
+description: 'Build a Debian package for any distribution using them'
+outputs:
+  packages:
+    description: 'Space separated list of filenames of the packages built'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'package'
