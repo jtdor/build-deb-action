@@ -2,6 +2,9 @@ author: 'Jörn-Thorben Hinz'
 name: 'Build a Debian package'
 description: 'Build a Debian package for any distribution using them'
 inputs:
+  args:
+    description: 'Options to be passed to dpkg-buildpackage'
+    required: false
   docker-image:
     description: 'Name of a Docker image to build inside'
     required: true
@@ -15,7 +18,7 @@ runs:
       shell: sh
     - run: docker run --rm -v$(pwd):/workspace --workdir /workspace --entrypoint /usr/bin/env build-deb-package
       shell: sh
-    - run: docker run --rm -v$(pwd):/workspace --workdir /workspace build-deb-package
+    - run: docker run --rm -v$(pwd):/workspace --workdir /workspace build-deb-package ${{ inputs.args }}
       shell: sh
 branding:
   icon: 'package'
