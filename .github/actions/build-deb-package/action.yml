@@ -14,6 +14,8 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - run: cat "$GITHUB_ENV"
+      shell: sh
     - run: env > "$HOME/env.list"
       shell: sh
     - run: env
