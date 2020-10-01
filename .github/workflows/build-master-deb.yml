@@ -11,6 +11,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
           args: --no-sign
+          docker-image: 'debian:stable-slim'
 
       - uses: actions/upload-artifact@v2
         with:

@@ -1,11 +1,17 @@
 author: 'Jörn-Thorben Hinz'
 name: 'Build a Debian package'
 description: 'Build a Debian package for any distribution using them'
+inputs:
+  docker-image:
+    description: 'Name of a Docker image to build inside'
+    required: true
 outputs:
   packages:
     description: 'Space separated list of filenames of the packages built'
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  env:
+    BUILD_FROM: ${{ inputs.docker-image }}
 branding:
   icon: 'package'
