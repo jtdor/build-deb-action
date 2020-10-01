@@ -2,3 +2,6 @@
 
 %:
 	dh $@
+
+dh_override_auto_install:
+	make install DESTDIR=debian/gh-playground prefix=/usr
