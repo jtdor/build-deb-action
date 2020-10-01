@@ -14,17 +14,15 @@ outputs:
 runs:
   using: 'composite'
   steps:
-    - run: cat "$GITHUB_ENV"
-      shell: sh
-    - run: env > "$GITHUB_ENV"
-      shell: sh
-    - run: env
+    - run: env > "$HOME/build-deb-package.env"
       shell: sh
     - run: docker build -t build-deb-package --build-arg=BUILD_FROM="${{ inputs.docker-image }}" "$GITHUB_ACTION_PATH"
       shell: sh
-    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --env-file "$GITHUB_ENV" --entrypoint env build-deb-package
+    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --env-file "$HOME/build-deb-package.env" --entrypoint env build-deb-package
       shell: sh
-    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --env-file "$GITHUB_ENV" build-deb-package ${{ inputs.args }}
+    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --env-file "$HOME/build-deb-package.env" build-deb-package ${{ inputs.args }}
+      shell: sh
+    - run: rm -f "$HOME/build-deb-package.env"
       shell: sh
 branding:
   icon: 'package'
