@@ -14,6 +14,8 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - run: env
+      shell: sh
     - run: docker build -t build-deb-package --build-arg=BUILD_FROM=${{ inputs.docker-image }} .
       shell: sh
     - run: docker run --rm -v$(pwd):/workspace --workdir /workspace --entrypoint /usr/bin/env build-deb-package
