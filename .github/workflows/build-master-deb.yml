@@ -9,6 +9,8 @@ jobs:
       - uses: ./.github/actions/build-deb-package
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
+          DPKG_COLORS: auto
+          DPKG_NLS: 1
         with:
           args: --no-sign
           docker-image: 'debian:stable-slim'
