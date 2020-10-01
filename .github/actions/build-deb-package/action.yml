@@ -18,9 +18,9 @@ runs:
       shell: sh
     - run: docker build -t build-deb-package --build-arg=BUILD_FROM=${{ inputs.docker-image }} .
       shell: sh
-    - run: docker run --rm -v$(pwd):/workspace --workdir /workspace --entrypoint /usr/bin/env build-deb-package
+    - run: docker run --rm -v"$GITHUB_ACTION_PATH":/workspace --workdir /workspace --entrypoint /usr/bin/env build-deb-package
       shell: sh
-    - run: docker run --rm -v$(pwd):/workspace --workdir /workspace build-deb-package ${{ inputs.args }}
+    - run: docker run --rm -v"$GITHUB_ACTION_PATH":/workspace --workdir /workspace build-deb-package ${{ inputs.args }}
       shell: sh
 branding:
   icon: 'package'
