@@ -1,0 +1,12 @@
+Source: gh-playground
+Section: unknown
+Priority: optional
+Maintainer: Jörn-Thorben Hinz <jtdor@users.noreply.github.com>
+Build-Depends: debhelper-compat (= 12)
+Standards-Version: 4.5.0
+Rules-Requires-Root: no
+
+Package: gh-playground
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: GitHub Playground
