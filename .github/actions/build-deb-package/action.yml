@@ -16,7 +16,7 @@ runs:
   steps:
     - run: cat "$GITHUB_ENV"
       shell: sh
-    - run: env > "$HOME/env.list"
+    - run: env > "$GITHUB_ENV"
       shell: sh
     - run: env
       shell: sh
