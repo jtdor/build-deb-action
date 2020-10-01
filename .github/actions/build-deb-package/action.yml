@@ -9,9 +9,13 @@ outputs:
   packages:
     description: 'Space separated list of filenames of the packages built'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
-  env:
-    BUILD_FROM: ${{ inputs.docker-image }}
+  using: 'composite'
+  steps:
+    - run: docker build -t build-deb-package --build-arg=BUILD_FROM=${{ inputs.docker-image }} .
+      shell: sh
+    - run: docker run --rm -v$GITHUB_WORKSPACE:$GITHUB_WORKSPACE --workdir $GITHUB_WORKSPACE --entrypoint /usr/bin/env build-deb-package
+      shell: sh
+    - run: docker run --rm -v$GITHUB_WORKSPACE:$GITHUB_WORKSPACE --workdir $GITHUB_WORKSPACE build-deb-package
+      shell: sh
 branding:
   icon: 'package'
