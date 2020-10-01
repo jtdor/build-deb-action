@@ -24,7 +24,7 @@ runs:
       shell: sh
     - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --env-file "$GITHUB_ENV" --entrypoint env build-deb-package
       shell: sh
-    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --env-file "$HOME/env.list" build-deb-package ${{ inputs.args }}
+    - run: docker run --rm -v"$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" --env-file "$GITHUB_ENV" build-deb-package ${{ inputs.args }}
       shell: sh
 branding:
   icon: 'package'
