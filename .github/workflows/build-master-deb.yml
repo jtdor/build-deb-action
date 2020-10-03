@@ -12,6 +12,7 @@ jobs:
           DPKG_COLORS: auto
           DPKG_NLS: 1
         with:
+          apt-args: -t stretch-backports
           args: --no-sign
           docker-image: debian:oldstable-backports
 
