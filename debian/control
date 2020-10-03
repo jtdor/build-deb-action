@@ -2,7 +2,7 @@ Source: gh-playground
 Section: unknown
 Priority: optional
 Maintainer: Jörn-Thorben Hinz <jtdor@users.noreply.github.com>
-Build-Depends: debhelper-compat (= 12)
+Build-Depends: debhelper-compat (= 11)
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 

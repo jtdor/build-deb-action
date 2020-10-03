@@ -12,9 +12,8 @@ jobs:
           DPKG_COLORS: auto
           DPKG_NLS: 1
         with:
-          apt-args: -t stretch-backports
           args: --no-sign
-          docker-image: debian:oldstable-backports
+          docker-image: ubuntu:bionic
 
       - uses: actions/upload-artifact@v2
         with:
