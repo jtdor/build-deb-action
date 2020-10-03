@@ -16,7 +16,7 @@ runs:
   steps:
     - run: env > "$HOME/build-deb-package.env"
       shell: sh
-    - run: docker run --env-file "$HOME/build-deb-package.env" --rm --tty --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" /github/action/build.sh ${{ inputs.args }}
+    - run: docker run --env-file "$HOME/build-deb-package.env" --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" /github/action/build.sh ${{ inputs.args }}
       shell: sh
     - run: rm -f "$HOME/build-deb-package.env"
       shell: sh
