@@ -18,11 +18,11 @@ runs:
       shell: sh
     - run: docker create --env-file "$HOME/build-deb-package.env" --name build-deb-package --tty --volume "$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" "${{ inputs.docker-image }}" cat
       shell: sh
-    - run: docker cp "$GITHUB_ACTION_PATH/entrypoint.sh" build-deb-package:/
+    - run: docker cp "$GITHUB_ACTION_PATH/build.sh" build-deb-package:/
       shell: sh
     - run: docker start build-deb-package
       shell: sh
-    - run: docker exec build-deb-package /entrypoint.sh ${{ inputs.args }}
+    - run: docker exec build-deb-package /build.sh ${{ inputs.args }}
       shell: sh
     - run: docker rm --force build-deb-package
       shell: sh
