@@ -13,7 +13,7 @@ jobs:
           DPKG_NLS: 1
         with:
           args: --no-sign
-          docker-image: 'debian:stable-slim'
+          docker-image: ubuntu:latest
 
       - uses: actions/upload-artifact@v2
         with:
