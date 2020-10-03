@@ -16,7 +16,7 @@ runs:
   steps:
     - run: env > "$HOME/build-deb-package.env"
       shell: sh
-    - run: docker create --env-file "$HOME/build-deb-package.env" --name build-deb-package --volume "$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" "${{ inputs.docker-image }}" cat
+    - run: docker create --env-file "$HOME/build-deb-package.env" --name build-deb-package --tty --volume "$HOME":"$HOME" --workdir "$GITHUB_WORKSPACE" "${{ inputs.docker-image }}" cat
       shell: sh
     - run: docker cp "$GITHUB_ACTION_PATH/entrypoint.sh" build-deb-package:/
       shell: sh
