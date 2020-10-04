@@ -10,7 +10,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          args: --build=binary --no-sign
+          dbp-args: --build=binary --no-sign
           docker-image: debian:bullseye-slim
 
       - uses: actions/upload-artifact@v2
@@ -27,7 +27,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          args: --build=binary --no-sign
+          dbp-args: --build=binary --no-sign
           docker-image: debian:buster-slim
 
       - uses: actions/upload-artifact@v2
@@ -44,7 +44,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          args: --build=binary --no-sign
+          dbp-args: --build=binary --no-sign
           docker-image: ubuntu:bionic
 
       - uses: actions/upload-artifact@v2
@@ -61,7 +61,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          args: --build=binary --no-sign
+          dbp-args: --build=binary --no-sign
           docker-image: ubuntu:focal
 
       - uses: actions/upload-artifact@v2
