@@ -1,7 +1,7 @@
 on: push
 
 jobs:
-  build-deb:
+  debian-bullseye-packages:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -9,13 +9,62 @@ jobs:
       - uses: ./.github/actions/build-deb-package
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
-          DPKG_COLORS: auto
-          DPKG_NLS: 1
         with:
-          args: --no-sign
+          args: --build=binary --no-sign
+          docker-image: debian:bullseye-slim
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: 'Debian Bullseye packages'
+          path: '*.deb'
+
+  debian-buster-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./.github/actions/build-deb-package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          args: --build=binary --no-sign
+          docker-image: debian:buster-slim
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: 'Debian Buster packages'
+          path: '*.deb'
+
+  ubuntu-bionic-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./.github/actions/build-deb-package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          args: --build=binary --no-sign
           docker-image: ubuntu:bionic
 
       - uses: actions/upload-artifact@v2
         with:
-          name: 'Debian packages'
+          name: 'Ubuntu Bionic packages'
+          path: '*.deb'
+
+  ubuntu-focal-packages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: ./.github/actions/build-deb-package
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          args: --build=binary --no-sign
+          docker-image: ubuntu:focal
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: 'Ubuntu Focal packages'
           path: '*.deb'
