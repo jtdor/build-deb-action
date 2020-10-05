@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -e
+set -eu
 
 # Usage:
 #   mv_other BUILDINFO EXT DEST
