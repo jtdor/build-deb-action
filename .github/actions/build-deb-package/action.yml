@@ -5,6 +5,10 @@ inputs:
   apt-opts:
     description: 'Options to be passed to apt-get'
     required: false
+  artifacts-dir:
+    default: 'debian/artifacts'
+    description: 'Directory path relative to $GITHUB_WORKSPACE to place the built packages in'
+    required: false
   dbp-opts:
     description: 'Options to be passed to dpkg-buildpackage'
     required: false
@@ -20,7 +24,7 @@ runs:
   steps:
     - run: env > "$HOME/build-deb-package.env"
       shell: sh
-    - run: docker run --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" /github/action/build.sh ${{ inputs.dbp-opts }}
+    - run: docker run --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --env BDP_ARTIFACTS_DIR="${{ inputs.artifacts-dir }}" --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" /github/action/build.sh ${{ inputs.dbp-opts }}
       shell: sh
     - run: rm -f "$HOME/build-deb-package.env"
       shell: sh
