@@ -10,7 +10,7 @@ mv_other()
 	[ ! -f "$a" ] || mv --target-directory="$3" -- "$a"
 }
 
-DEBIAN_FRONTEND=noninteractive apt-get update --quiet $APT_OPTS
+DEBIAN_FRONTEND=noninteractive apt-get update --quiet $BDP_APT_OPTS
 
 DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet --yes $BDP_APT_OPTS -- dpkg-dev $BDP_EXTRA_BUILD_DEPS
 
