@@ -16,7 +16,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: 'Debian Bullseye packages'
-          path: '*.deb'
+          path: 'debian/artifacts/*.deb'
 
   debian-buster-packages:
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: 'Debian Buster packages'
-          path: '*.deb'
+          path: 'debian/artifacts/*.deb'
 
   ubuntu-bionic-packages:
     runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: 'Ubuntu Bionic packages'
-          path: '*.deb'
+          path: 'debian/artifacts/*.deb'
 
   ubuntu-focal-packages:
     runs-on: ubuntu-latest
@@ -67,4 +67,4 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: 'Ubuntu Focal packages'
-          path: '*.deb'
+          path: 'debian/artifacts/*.deb'
