@@ -1,33 +1,33 @@
-author: 'Jörn-Thorben Hinz'
-name: 'Build a Debian package'
-description: 'Build a Debian package for any distribution using them'
+author: Jörn-Thorben Hinz
+name: Build a Debian package
+description: Build a Debian package for any distribution using them
 inputs:
   apt-opts:
-    description: 'Options to be passed to apt-get'
+    description: Options to be passed to apt-get
     required: false
   artifacts-dir:
-    default: 'debian/artifacts'
-    description: 'Directory path relative to $GITHUB_WORKSPACE to place the built packages in'
+    default: debian/artifacts
+    description: Directory path relative to $GITHUB_WORKSPACE to place the built packages in
     required: false
   dbp-opts:
-    description: 'Options to be passed to dpkg-buildpackage'
+    description: Options to be passed to dpkg-buildpackage
     required: false
   docker-image:
     default: debian:stable-slim
-    description: 'Name of a Docker image to build inside'
+    description: Name of a Docker image to build inside
     required: false
   extra-build-deps:
-    description: 'Extra packages to be installed as build dependencies'
+    description: Extra packages to be installed as build dependencies
     required: false
   sources-dir:
     default: ''
-    description: 'Path relative to $GITHUB_WORKSPACE that contains the package sources'
+    description: Path relative to $GITHUB_WORKSPACE that contains the package sources
     required: false
 outputs:
   packages:
-    description: 'Space separated list of filenames of the packages built'
+    description: Space separated list of filenames of the packages built
 runs:
-  using: 'composite'
+  using: composite
   steps:
     - run: env > "$HOME/build-deb-package.env"
       shell: sh
@@ -37,4 +37,4 @@ runs:
       shell: sh
 branding:
   color: red
-  icon: 'package'
+  icon: package
