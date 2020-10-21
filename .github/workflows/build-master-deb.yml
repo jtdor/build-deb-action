@@ -22,18 +22,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          path: src
 
       - uses: ./.github/actions/build-deb-package
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
+          artifacts-dir: my_artifacts
           dbp-opts: --build=binary --no-sign
           docker-image: debian:buster-slim
+          sources-dir: src
 
       - uses: actions/upload-artifact@v2
         with:
           name: 'Debian Buster packages'
-          path: 'debian/artifacts/*.deb'
+          path: 'my_artifacts/*.deb'
 
   ubuntu-bionic-packages:
     runs-on: ubuntu-latest
