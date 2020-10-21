@@ -16,7 +16,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends --quiet -
 
 # Calling `apt-get build-dep` with ./ here to easily keep compatibility with
 # old apt versions
-DEBIAN_FRONTEND=noninteractive apt-get build-dep --no-install-recommends --quiet --yes $BDP_APT_OPTS -- "./$BDP_SOURCES_DIR"
+DEBIAN_FRONTEND=noninteractive apt-get build-dep --no-install-recommends --quiet --yes $BDP_APT_OPTS -- "$BDP_SOURCES_DIR"
 
 ( cd "$BDP_SOURCES_DIR" && dpkg-buildpackage "$@" )
 
