@@ -36,4 +36,5 @@ runs:
     - run: rm -f "$HOME/build-deb-package.env"
       shell: sh
 branding:
+  color: purple
   icon: 'package'
