@@ -29,11 +29,26 @@ outputs:
 runs:
   using: composite
   steps:
-    - run: env > "$HOME/build-deb-package.env"
+    - name: Prepare environment
+      run: env > "$HOME/build-deb-package.env"
       shell: bash
-    - run: docker run --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --env BDP_ARTIFACTS_DIR="${{ inputs.artifacts-dir }}" --env BDP_EXTRA_BUILD_DEPS="${{ inputs.extra-build-deps }}" --env BDP_SOURCES_DIR="/github/workspace/${{ inputs.sources-dir }}" --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" /github/action/build.sh ${{ inputs.dbp-opts }}
+    - name: Run build container
+      run: docker run --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --env BDP_ARTIFACTS_DIR="${{ inputs.artifacts-dir }}" --env BDP_EXTRA_BUILD_DEPS="${{ inputs.extra-build-deps }}" --env BDP_SOURCES_DIR="/github/workspace/${{ inputs.sources-dir }}" --name=bdp_container --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" tail -f /dev/null
       shell: bash
-    - run: rm -f "$HOME/build-deb-package.env"
+    - name: Install build dependencies
+      run: docker exec bdp_container /github/action/install_build_deps
+      shell: bash
+    - name: Build packages
+      run: docker exec bdp_container /github/action/build_packages
+      shell: bash
+    - name: Copy artifacts
+      run: docker exec bdp_container /github/action/copy_artifacts
+      shell: bash
+    - name: Stop build container
+      run: docker stop --time=1 bdp_container
+      shell: bash
+    - name: Clean up environment
+      run: rm -f "$HOME/build-deb-package.env"
       shell: bash
 branding:
   color: red
