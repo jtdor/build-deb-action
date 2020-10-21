@@ -30,11 +30,11 @@ runs:
   using: composite
   steps:
     - run: env > "$HOME/build-deb-package.env"
-      shell: sh
+      shell: bash
     - run: docker run --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --env BDP_ARTIFACTS_DIR="${{ inputs.artifacts-dir }}" --env BDP_EXTRA_BUILD_DEPS="${{ inputs.extra-build-deps }}" --env BDP_SOURCES_DIR="/github/workspace/${{ inputs.sources-dir }}" --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" /github/action/build.sh ${{ inputs.dbp-opts }}
-      shell: sh
+      shell: bash
     - run: rm -f "$HOME/build-deb-package.env"
-      shell: sh
+      shell: bash
 branding:
   color: red
   icon: package
