@@ -25,7 +25,7 @@ jobs:
         with:
           path: src
 
-      - uses: ./.github/actions/build-deb-package
+      - uses: ./src/.github/actions/build-deb-package
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
