@@ -33,7 +33,7 @@ runs:
       run: env > "$HOME/build-deb-package.env"
       shell: bash
     - name: Run build container
-      run: docker run --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --env BDP_ARTIFACTS_DIR="${{ inputs.artifacts-dir }}" --env BDP_EXTRA_BUILD_DEPS="${{ inputs.extra-build-deps }}" --env BDP_SOURCES_DIR="/github/workspace/${{ inputs.sources-dir }}" --name=bdp_container --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" tail -f /dev/null
+      run: docker run --detach --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --env BDP_ARTIFACTS_DIR="${{ inputs.artifacts-dir }}" --env BDP_EXTRA_BUILD_DEPS="${{ inputs.extra-build-deps }}" --env BDP_SOURCES_DIR="/github/workspace/${{ inputs.sources-dir }}" --name=bdp_container --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" tail -f /dev/null
       shell: bash
     - name: Install build dependencies
       run: docker exec bdp_container /github/action/install_build_deps
