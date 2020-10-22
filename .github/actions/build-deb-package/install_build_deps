@@ -4,7 +4,7 @@ set -eu
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt-get update --quiet $BDP_APT_OPTS
+apt-get update --quiet
 
 apt-get install --no-install-recommends --quiet --yes $BDP_APT_OPTS -- dpkg-dev $BDP_EXTRA_BUILD_DEPS
 
