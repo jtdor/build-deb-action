@@ -14,4 +14,4 @@ apt-get install --no-install-recommends --quiet --yes $BDP_APT_OPTS -- build-ess
 
 apt-get build-dep --no-install-recommends --quiet --yes $BDP_APT_OPTS -- "$BDP_SOURCES_DIR"
 
-echo "::endgroup"
+echo "::endgroup::"

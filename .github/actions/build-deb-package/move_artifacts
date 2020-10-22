@@ -25,4 +25,4 @@ while read -r l; do
 	esac
 done < "$BDP_SOURCES_DIR/debian/files"
 
-echo "::endgroup"
+echo "::endgroup::"
