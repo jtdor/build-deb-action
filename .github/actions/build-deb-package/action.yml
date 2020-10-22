@@ -41,8 +41,8 @@ runs:
     - name: Build packages
       run: docker exec bdp_container /github/action/build_packages
       shell: bash
-    - name: Copy artifacts
-      run: docker exec bdp_container /github/action/copy_artifacts
+    - name: Move artifacts
+      run: docker exec bdp_container /github/action/move_artifacts
       shell: bash
     - name: Stop build container
       run: docker stop --time=1 bdp_container
