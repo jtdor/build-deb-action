@@ -26,7 +26,7 @@ docker run \
 	--volume="$GITHUB_ACTION_PATH":/github/action \
 	--volume="$GITHUB_WORKSPACE":/github/workspace \
 	--workdir=/github/workspace \
-	-- "${{ inputs.docker-image }}" tail -f /dev/null
+	-- "$BDP_DOCKER_IMAGE" tail -f /dev/null
 bdp_end_group
 
 bdp_start_group "Installing build dependencies"
