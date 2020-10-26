@@ -23,9 +23,6 @@ inputs:
     default: ''
     description: Path relative to $GITHUB_WORKSPACE that contains the package sources
     required: false
-outputs:
-  packages:
-    description: Space separated list of filenames of the packages built
 runs:
   using: composite
   steps:
