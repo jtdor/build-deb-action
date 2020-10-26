@@ -2,9 +2,5 @@
 
 set -eu
 
-echo "::group::Building packages"
-
 cd "$BDP_SOURCES_DIR"
 dpkg-buildpackage "$@"
-
-echo "::endgroup::"

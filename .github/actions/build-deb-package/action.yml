@@ -26,16 +26,12 @@ inputs:
 runs:
   using: composite
   steps:
-    - run: |
-          echo "::group::Preparing build container"
-          env > "$HOME/build-deb-package.env"
-          docker run --detach --env-file "$HOME/build-deb-package.env" --env BDP_APT_OPTS="${{ inputs.apt-opts }}" --env BDP_ARTIFACTS_DIR="${{ inputs.artifacts-dir }}" --env BDP_EXTRA_BUILD_DEPS="${{ inputs.extra-build-deps }}" --env BDP_SOURCES_DIR="/github/workspace/${{ inputs.sources-dir }}" --name=bdp_container --rm --volume "$GITHUB_ACTION_PATH":/github/action --volume "$GITHUB_WORKSPACE":/github/workspace --workdir /github/workspace "${{ inputs.docker-image }}" tail -f /dev/null
-          echo "::endgroup::"
-          docker exec bdp_container /github/action/install_build_deps
-          docker exec bdp_container /github/action/build_packages
-          docker exec bdp_container /github/action/move_artifacts
-          docker stop --time=1 bdp_container
-          rm -f "$HOME/build-deb-package.env"
+    - env:
+        BDP_APT_OPTS: ${{ inputs.apt-opts }}
+        BDP_ARTIFACTS_DIR: ./${{ inputs.artifacts-dir }}
+        BDP_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
+        BDP_SOURCES_DIR: ./${{ inputs.sources-dir }}
+      run: $GITHUB_ACTION_PATH/run.sh
       shell: bash
 branding:
   color: red

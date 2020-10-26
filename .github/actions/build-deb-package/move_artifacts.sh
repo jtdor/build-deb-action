@@ -10,8 +10,6 @@ mv_other()
 	[ ! -f "$a" ] || mv -- "$a" "$3"
 }
 
-echo "::group::Moving artifacts"
-
 mkdir -p -- "$BDP_ARTIFACTS_DIR"
 
 while read -r l; do
@@ -24,5 +22,3 @@ while read -r l; do
 			;;
 	esac
 done < "$BDP_SOURCES_DIR/debian/files"
-
-echo "::endgroup::"
