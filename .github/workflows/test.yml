@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-deb-package
+      - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-deb-package
+      - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-deb-package
+      - uses: ./
         with:
           buildpackage-opts: --build=binary --no-sign
           source-dir: test
@@ -55,7 +55,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/build-deb-package
+      - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
