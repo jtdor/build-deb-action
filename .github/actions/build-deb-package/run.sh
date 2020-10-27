@@ -25,7 +25,7 @@ env_file=$(mktemp) || exit 1
 trap clean_up EXIT INT HUP TERM
 
 BDP_ARTIFACTS_DIR=/github/workspace/${BDP_ARTIFACTS_DIR:-.}
-case "$(realpath "$BDP_ARTIFACTS_DIR")" in
+case "$(realpath --canonicalize-missing -- "$BDP_ARTIFACTS_DIR")" in
 	/github/workspace*)
 		;;
 	*)
@@ -35,7 +35,7 @@ case "$(realpath "$BDP_ARTIFACTS_DIR")" in
 esac
 
 BDP_SOURCES_DIR=/github/workspace/${BDP_SOURCES_DIR:-.}
-case "$(realpath "$BDP_SOURCES_DIR")" in
+case "$(realpath --canonicalize-missing -- "$BDP_SOURCES_DIR")" in
 	/github/workspace*)
 		;;
 	*)
