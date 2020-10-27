@@ -65,15 +65,15 @@ docker run \
 bdp_end_group
 
 bdp_start_group "Installing build dependencies"
-docker exec bdp_container /github/action/install_build_deps.sh
+docker exec bdp_container /github/action/scripts/install_build_deps.sh
 bdp_end_group
 
 bdp_start_group "Building package"
-docker exec bdp_container /github/action/build_packages.sh $BDP_BUILDPACKAGE_OPTS
+docker exec bdp_container /github/action/scripts/build_packages.sh $BDP_BUILDPACKAGE_OPTS
 bdp_end_group
 
 bdp_start_group "Moving artifacts"
-docker exec bdp_container /github/action/move_artifacts.sh
+docker exec bdp_container /github/action/scripts/move_artifacts.sh
 bdp_end_group
 
 bdp_start_group "Stopping build container"
