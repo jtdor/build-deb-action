@@ -26,13 +26,6 @@ inputs:
 runs:
   using: composite
   steps:
-    - env:
-        BDP_APT_OPTS: ${{ inputs.apt-opts }}
-        BDP_ARTIFACTS_DIR: ${{ inputs.artifacts-dir }}
-        BDP_BUILDPACKAGE_OPTS: ${{ inputs.buildpackage-opts }}
-        BDP_DOCKER_IMAGE: ${{ inputs.docker-image }}
-        BDP_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
-        BDP_SOURCE_DIR: ${{ inputs.source-dir }}
       run: ${{ github.action_path }}/scripts/run.sh
       shell: bash
 branding:

@@ -31,8 +31,8 @@ clean_up()
 env_file=$(mktemp) || exit 1
 trap clean_up EXIT INT HUP TERM
 
-BDP_ARTIFACTS_DIR=/github/workspace/${BDP_ARTIFACTS_DIR:-.}
-case "$(realpath --canonicalize-missing -- "$BDP_ARTIFACTS_DIR")" in
+INPUT_ARTIFACTS_DIR=/github/workspace/${INPUT_ARTIFACTS_DIR:-.}
+case "$(realpath --canonicalize-missing -- "$INPUT_ARTIFACTS_DIR")" in
 	/github/workspace*)
 		;;
 	*)
@@ -41,8 +41,8 @@ case "$(realpath --canonicalize-missing -- "$BDP_ARTIFACTS_DIR")" in
 		;;
 esac
 
-BDP_SOURCE_DIR=/github/workspace/${BDP_SOURCE_DIR:-.}
-case "$(realpath --canonicalize-missing -- "$BDP_SOURCE_DIR")" in
+INPUT_SOURCE_DIR=/github/workspace/${INPUT_SOURCE_DIR:-.}
+case "$(realpath --canonicalize-missing -- "$INPUT_SOURCE_DIR")" in
 	/github/workspace*)
 		;;
 	*)
@@ -61,7 +61,7 @@ docker run \
 	--volume="$GITHUB_ACTION_PATH":/github/action \
 	--volume="$GITHUB_WORKSPACE":/github/workspace \
 	--workdir=/github/workspace \
-	-- "$BDP_DOCKER_IMAGE" tail -f /dev/null
+	-- "$INPUT_DOCKER_IMAGE" tail -f /dev/null
 bdp_end_group
 
 bdp_start_group "Installing build dependencies"
@@ -69,7 +69,7 @@ docker exec bdp_container /github/action/scripts/install_build_deps.sh
 bdp_end_group
 
 bdp_start_group "Building package"
-docker exec bdp_container /github/action/scripts/build_packages.sh $BDP_BUILDPACKAGE_OPTS
+docker exec bdp_container /github/action/scripts/build_packages.sh $INPUT_BUILDPACKAGE_OPTS
 bdp_end_group
 
 bdp_start_group "Moving artifacts"
