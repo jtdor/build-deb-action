@@ -1,4 +1,4 @@
-Source: gh-playground
+Source: test
 Section: unknown
 Priority: optional
 Maintainer: Jörn-Thorben Hinz <jtdor@users.noreply.github.com>
@@ -6,7 +6,7 @@ Build-Depends: debhelper-compat (= 11)
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 
-Package: gh-playground
+Package: test
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: GitHub Playground
+Description: Test package
