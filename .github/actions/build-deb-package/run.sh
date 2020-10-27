@@ -3,6 +3,13 @@
 set -eu
 
 # Usage:
+#   bdp_error MESSAGE
+bdp_error()
+{
+	echo "::error::$1"
+}
+
+# Usage:
 #   bdp_end_group
 bdp_end_group()
 {
@@ -29,7 +36,7 @@ case "$(realpath --canonicalize-missing -- "$BDP_ARTIFACTS_DIR")" in
 	/github/workspace*)
 		;;
 	*)
-		echo "artifacts-dir is not in GITHUB_WORKSPACE" >&2
+		bdp_error "artifacts-dir is not in GITHUB_WORKSPACE"
 		exit 2
 		;;
 esac
@@ -39,7 +46,7 @@ case "$(realpath --canonicalize-missing -- "$BDP_SOURCES_DIR")" in
 	/github/workspace*)
 		;;
 	*)
-		echo "sources-dir is not in GITHUB_WORKSPACE" >&2
+		bdp_error "sources-dir is not in GITHUB_WORKSPACE"
 		exit 2
 		;;
 esac
