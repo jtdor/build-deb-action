@@ -26,7 +26,6 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          artifacts-dir: my_artifacts
           dbp-opts: --build=binary --no-sign
           docker-image: ubuntu:latest
           sources-dir: test
