@@ -2,24 +2,24 @@ author: Jörn-Thorben Hinz
 name: Build Debian packages
 description: Build Debian packages with dpkg-buildpackage in a flexible environment.
 inputs:
-  apt_opts:
+  apt-opts:
     description: Options to be passed to apt-get
     required: false
-  artifacts_dir:
+  artifacts-dir:
     default: debian/artifacts
     description: Directory path relative to $GITHUB_WORKSPACE to place the built packages in
     required: false
-  buildpackage_opts:
+  buildpackage-opts:
     description: Options to be passed to dpkg-buildpackage
     required: false
-  docker_image:
+  docker-image:
     default: debian:stable-slim
     description: Name of a Docker image to build inside
     required: false
-  extra_build_deps:
+  extra-build-deps:
     description: Extra packages to be installed as build dependencies
     required: false
-  source_dir:
+  source-dir:
     default: ''
     description: Path relative to $GITHUB_WORKSPACE that contains the package sources
     required: false
