@@ -36,7 +36,7 @@ case "$(realpath --canonicalize-missing -- "$INPUT_ARTIFACTS_DIR")" in
 	/github/workspace*)
 		;;
 	*)
-		bdp_error "artifacts-dir is not in GITHUB_WORKSPACE"
+		bdp_error "artifacts_dir is not in GITHUB_WORKSPACE"
 		exit 2
 		;;
 esac
@@ -46,7 +46,7 @@ case "$(realpath --canonicalize-missing -- "$INPUT_SOURCE_DIR")" in
 	/github/workspace*)
 		;;
 	*)
-		bdp_error "source-dir is not in GITHUB_WORKSPACE"
+		bdp_error "source_dir is not in GITHUB_WORKSPACE"
 		exit 2
 		;;
 esac
