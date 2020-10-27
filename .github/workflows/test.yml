@@ -10,7 +10,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
           artifacts-dir: my_artifacts
-          dbp-opts: --build=binary --no-sign
+          buildpackage-opts: --build=binary --no-sign
           source-dir: test
       - run: |
           dpkg --info my_artifacts/test_1_amd64.deb
@@ -26,7 +26,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          dbp-opts: --build=binary --no-sign
+          buildpackage-opts: --build=binary --no-sign
           docker-image: ubuntu:latest
           source-dir: test
       - run: |
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/build-deb-package
         with:
-          dbp-opts: --build=binary --no-sign
+          buildpackage-opts: --build=binary --no-sign
           source-dir: test
       - run: |
           dpkg --info debian/artifacts/test_1_amd64.deb
@@ -59,7 +59,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          dbp-opts: --build=binary --no-sign
+          buildpackage-opts: --build=binary --no-sign
           source-dir: test
       - run: |
           dpkg --info debian/artifacts/test_1_amd64.deb

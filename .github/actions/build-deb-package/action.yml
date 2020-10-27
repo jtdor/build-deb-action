@@ -9,7 +9,7 @@ inputs:
     default: debian/artifacts
     description: Directory path relative to $GITHUB_WORKSPACE to place the built packages in
     required: false
-  dbp-opts:
+  buildpackage-opts:
     description: Options to be passed to dpkg-buildpackage
     required: false
   docker-image:
@@ -29,6 +29,7 @@ runs:
     - env:
         BDP_APT_OPTS: ${{ inputs.apt-opts }}
         BDP_ARTIFACTS_DIR: ${{ inputs.artifacts-dir }}
+        BDP_BUILDPACKAGE_OPTS: ${{ inputs.buildpackage-opts }}
         BDP_DOCKER_IMAGE: ${{ inputs.docker-image }}
         BDP_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
         BDP_SOURCE_DIR: ${{ inputs.source-dir }}
