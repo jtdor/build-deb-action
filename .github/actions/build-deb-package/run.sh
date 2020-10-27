@@ -16,11 +16,19 @@ bdp_start_group()
 	echo "::group::$1"
 }
 
+clean_up()
+{
+	rm --force "$env_file"
+}
+
+env_file=$(mktemp) || exit 1
+trap clean_up EXIT INT HUP TERM
+
 bdp_start_group "Preparing build container"
-env > "$HOME/build-deb-package.env"
+env > "$env_file"
 docker run \
 	--detach \
-	--env-file="$HOME/build-deb-package.env" \
+	--env-file="$env_file" \
 	--name=bdp_container \
 	--rm \
 	--volume="$GITHUB_ACTION_PATH":/github/action \
@@ -43,5 +51,4 @@ bdp_end_group
 
 bdp_start_group "Stopping build container"
 docker stop --time=1 bdp_container
-rm -f "$HOME/build-deb-package.env"
 bdp_end_group
