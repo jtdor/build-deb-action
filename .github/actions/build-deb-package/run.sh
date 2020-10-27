@@ -24,6 +24,26 @@ clean_up()
 env_file=$(mktemp) || exit 1
 trap clean_up EXIT INT HUP TERM
 
+BDP_ARTIFACTS_DIR=/github/workspace/${BDP_ARTIFACTS_DIR:-.}
+case "$(realpath "$BDP_ARTIFACTS_DIR")" in
+	/github/workspace*)
+		;;
+	*)
+		echo "artifacts-dir is not in GITHUB_WORKSPACE" >&2
+		exit 2
+		;;
+esac
+
+BDP_SOURCES_DIR=/github/workspace/${BDP_SOURCES_DIR:-.}
+case "$(realpath "$BDP_SOURCES_DIR")" in
+	/github/workspace*)
+		;;
+	*)
+		echo "sources-dir is not in GITHUB_WORKSPACE" >&2
+		exit 2
+		;;
+esac
+
 bdp_start_group "Preparing build container"
 env > "$env_file"
 docker run \

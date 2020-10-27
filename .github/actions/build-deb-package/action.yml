@@ -28,10 +28,10 @@ runs:
   steps:
     - env:
         BDP_APT_OPTS: ${{ inputs.apt-opts }}
-        BDP_ARTIFACTS_DIR: ./${{ inputs.artifacts-dir }}
+        BDP_ARTIFACTS_DIR: ${{ inputs.artifacts-dir }}
         BDP_DOCKER_IMAGE: ${{ inputs.docker-image }}
         BDP_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
-        BDP_SOURCES_DIR: ./${{ inputs.sources-dir }}
+        BDP_SOURCES_DIR: ${{ inputs.sources-dir }}
       run: $GITHUB_ACTION_PATH/run.sh
       shell: bash
 branding:
