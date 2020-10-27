@@ -1,6 +1,6 @@
 author: Jörn-Thorben Hinz
-name: Build a Debian package
-description: Build a Debian package for any distribution using them
+name: Build Debian packages
+description: Build Debian packages with dpkg-buildpackage in a flexible environment.
 inputs:
   apt-opts:
     description: Options to be passed to apt-get
