@@ -11,7 +11,7 @@ jobs:
         with:
           artifacts-dir: my_artifacts
           dbp-opts: --build=binary --no-sign
-          sources-dir: test
+          source-dir: test
       - run: |
           dpkg --info my_artifacts/test_1_amd64.deb
           dpkg --contents my_artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
@@ -28,7 +28,7 @@ jobs:
         with:
           dbp-opts: --build=binary --no-sign
           docker-image: ubuntu:latest
-          sources-dir: test
+          source-dir: test
       - run: |
           dpkg --info debian/artifacts/test_1_amd64.deb
           dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
@@ -42,7 +42,7 @@ jobs:
       - uses: ./.github/actions/build-deb-package
         with:
           dbp-opts: --build=binary --no-sign
-          sources-dir: test
+          source-dir: test
       - run: |
           dpkg --info debian/artifacts/test_1_amd64.deb
           dpkg --info debian/artifacts/test-dbgsym_1_amd64.deb
@@ -60,7 +60,7 @@ jobs:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
           dbp-opts: --build=binary --no-sign
-          sources-dir: test
+          source-dir: test
       - run: |
           dpkg --info debian/artifacts/test_1_amd64.deb
           dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin

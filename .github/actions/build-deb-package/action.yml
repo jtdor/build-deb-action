@@ -19,7 +19,7 @@ inputs:
   extra-build-deps:
     description: Extra packages to be installed as build dependencies
     required: false
-  sources-dir:
+  source-dir:
     default: ''
     description: Path relative to $GITHUB_WORKSPACE that contains the package sources
     required: false
@@ -31,7 +31,7 @@ runs:
         BDP_ARTIFACTS_DIR: ${{ inputs.artifacts-dir }}
         BDP_DOCKER_IMAGE: ${{ inputs.docker-image }}
         BDP_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
-        BDP_SOURCES_DIR: ${{ inputs.sources-dir }}
+        BDP_SOURCE_DIR: ${{ inputs.source-dir }}
       run: $GITHUB_ACTION_PATH/run.sh
       shell: bash
 branding:

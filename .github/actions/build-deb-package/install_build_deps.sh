@@ -10,4 +10,4 @@ apt-get update --quiet
 # essential for package building by the Debian Policy.
 apt-get install --no-install-recommends --quiet --yes $BDP_APT_OPTS -- build-essential $BDP_EXTRA_BUILD_DEPS
 
-apt-get build-dep --no-install-recommends --quiet --yes $BDP_APT_OPTS -- "$BDP_SOURCES_DIR"
+apt-get build-dep --no-install-recommends --quiet --yes $BDP_APT_OPTS -- "$BDP_SOURCE_DIR"

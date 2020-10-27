@@ -41,12 +41,12 @@ case "$(realpath --canonicalize-missing -- "$BDP_ARTIFACTS_DIR")" in
 		;;
 esac
 
-BDP_SOURCES_DIR=/github/workspace/${BDP_SOURCES_DIR:-.}
-case "$(realpath --canonicalize-missing -- "$BDP_SOURCES_DIR")" in
+BDP_SOURCE_DIR=/github/workspace/${BDP_SOURCE_DIR:-.}
+case "$(realpath --canonicalize-missing -- "$BDP_SOURCE_DIR")" in
 	/github/workspace*)
 		;;
 	*)
-		bdp_error "sources-dir is not in GITHUB_WORKSPACE"
+		bdp_error "source-dir is not in GITHUB_WORKSPACE"
 		exit 2
 		;;
 esac

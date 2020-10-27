@@ -2,5 +2,5 @@
 
 set -eu
 
-cd "$BDP_SOURCES_DIR"
+cd "$BDP_SOURCE_DIR"
 dpkg-buildpackage "$@"

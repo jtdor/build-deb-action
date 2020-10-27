@@ -24,7 +24,7 @@ mv_other_artifact()
 mkdir -p -- "$BDP_ARTIFACTS_DIR"
 
 while read -r l; do
-	artifact=$BDP_SOURCES_DIR/../${l%% *}
+	artifact=$BDP_SOURCE_DIR/../${l%% *}
 	mv_artifact "$artifact" "$BDP_ARTIFACTS_DIR"
 	case "$artifact" in
 		*.buildinfo)
@@ -32,4 +32,4 @@ while read -r l; do
 			mv_other_artifact "$artifact" .changes "$BDP_ARTIFACTS_DIR"
 			;;
 	esac
-done < "$BDP_SOURCES_DIR/debian/files"
+done < "$BDP_SOURCE_DIR/debian/files"
