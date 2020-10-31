@@ -20,4 +20,4 @@ apt-get build-dep \
 	--quiet \
 	--yes \
 	$INPUT_APT_OPTS \
-	-- "$INPUT_SOURCE_DIR"
+	-- "./$INPUT_SOURCE_DIR"
