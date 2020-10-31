@@ -69,7 +69,7 @@ docker exec bdp_container /github/action/scripts/install_build_deps.sh
 bdp_end_group
 
 bdp_start_group "Building package"
-docker exec bdp_container /github/action/scripts/build_packages.sh $INPUT_BUILDPACKAGE_OPTS
+docker exec bdp_container /github/action/scripts/build_packages.sh
 bdp_end_group
 
 bdp_start_group "Moving artifacts"
