@@ -21,7 +21,7 @@ mv_other_artifact()
 	[ ! -f "$a" ] || mv_artifact "$a" "$3"
 }
 
-mkdir -p -- "$INPUT_ARTIFACTS_DIR"
+mkdir --parents -- "$INPUT_ARTIFACTS_DIR"
 
 while read -r l; do
 	artifact=$INPUT_SOURCE_DIR/../${l%% *}
