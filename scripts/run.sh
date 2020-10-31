@@ -25,7 +25,7 @@ bdp_start_group()
 
 clean_up()
 {
-	rm --force "$env_file"
+	rm --force -- "$env_file"
 }
 
 env_file=$(mktemp) || exit 1

@@ -2,5 +2,5 @@
 
 set -eu
 
-cd "$INPUT_SOURCE_DIR"
+cd -- "$INPUT_SOURCE_DIR"
 dpkg-buildpackage "$@"
