@@ -23,6 +23,19 @@ bdp_start_group()
 	echo "::group::$1"
 }
 
+# Usage:
+#   check_path_prefix PATH PREFIX
+check_path_prefix()
+{
+	case "$(realpath --canonicalize-missing -- "$1")" in
+		$(realpath "$2/*"))
+			return 0
+			;;
+	esac
+
+	return 1
+}
+
 clean_up()
 {
 	rm --force -- "$env_file"
@@ -31,25 +44,17 @@ clean_up()
 env_file=$(mktemp) || exit 1
 trap clean_up EXIT INT HUP TERM
 
-INPUT_ARTIFACTS_DIR=/github/workspace/${INPUT_ARTIFACTS_DIR:-.}
-case "$(realpath --canonicalize-missing -- "$INPUT_ARTIFACTS_DIR")" in
-	/github/workspace*)
-		;;
-	*)
-		bdp_error "artifacts-dir is not in GITHUB_WORKSPACE"
-		exit 2
-		;;
-esac
+INPUT_ARTIFACTS_DIR=${INPUT_ARTIFACTS_DIR:-.}
+if ! check_path_prefix "$INPUT_ARTIFACTS_DIR" "$GITHUB_WORKSPACE"; then
+	bdp_error "artifacts-dir is not in GITHUB_WORKSPACE"
+	exit 2
+fi
 
-INPUT_SOURCE_DIR=/github/workspace/${INPUT_SOURCE_DIR:-.}
-case "$(realpath --canonicalize-missing -- "$INPUT_SOURCE_DIR")" in
-	/github/workspace*)
-		;;
-	*)
-		bdp_error "source-dir is not in GITHUB_WORKSPACE"
-		exit 2
-		;;
-esac
+INPUT_SOURCE_DIR=${INPUT_SOURCE_DIR:-.}
+if ! check_path_prefix "$INPUT_SOURCE_DIR" "$GITHUB_WORKSPACE"; then
+	bdp_error "source-dir is not in GITHUB_WORKSPACE"
+	exit 2
+fi
 
 bdp_start_group "Preparing build container"
 env > "$env_file"
