@@ -27,8 +27,9 @@ bdp_start_group()
 #   check_path_prefix PATH PREFIX
 check_path_prefix()
 {
+	real_prefix=$(realpath "$2")
 	case "$(realpath --canonicalize-missing -- "$1")" in
-		$(realpath "$2/*"))
+		"$real_prefix"|"$real_prefix/"*)
 			return 0
 			;;
 	esac
