@@ -16,7 +16,6 @@ apt-get install \
 	-- build-essential $INPUT_EXTRA_BUILD_DEPS
 
 apt-get build-dep \
-	--no-install-recommends \
 	--quiet \
 	--yes \
 	$INPUT_APT_OPTS \
