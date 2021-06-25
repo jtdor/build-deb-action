@@ -40,6 +40,7 @@ check_path_prefix()
 clean_up()
 {
 	rm --force -- "$env_file"
+	rm --force -- "${image_id_file-}"
 }
 
 env_file=$(mktemp) || exit 1
@@ -55,6 +56,20 @@ INPUT_SOURCE_DIR=${INPUT_SOURCE_DIR:-.}
 if ! check_path_prefix "$INPUT_SOURCE_DIR" "$GITHUB_WORKSPACE"; then
 	error "source-dir is not in GITHUB_WORKSPACE"
 	exit 2
+fi
+
+if [ -f "$INPUT_DOCKER_IMAGE" ]; then
+	if ! check_path_prefix "$INPUT_DOCKER_IMAGE" "$GITHUB_WORKSPACE"; then
+		error "docker-image is the path of a Dockerfile but it is not in GITHUB_WORKSPACE"
+		exit 2
+	fi
+
+	image_id_file=$(mktemp) || exit 1
+	docker build \
+		--file="$INPUT_DOCKER_IMAGE" \
+		--iidfile="$image_id_file" \
+		-- "$GITHUB_WORKSPACE/$(dirname -- "$INPUT_DOCKER_IMAGE")"
+	INPUT_DOCKER_IMAGE=$(cat "$image_id_file")
 fi
 
 start_group "Preparing build container"
