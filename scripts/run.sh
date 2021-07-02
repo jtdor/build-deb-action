@@ -62,6 +62,8 @@ env > "$env_file"
 container_id=$(docker run \
 	--detach \
 	--env-file="$env_file" \
+	--env=GITHUB_ACTION_PATH=/github/action \
+	--env=GITHUB_WORKSPACE=/github/workspace \
 	--rm \
 	--volume="$GITHUB_ACTION_PATH":/github/action \
 	--volume="$GITHUB_WORKSPACE":/github/workspace \
