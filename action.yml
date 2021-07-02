@@ -8,21 +8,21 @@ inputs:
   artifacts-dir:
     default: debian/artifacts
     description: Directory path relative to $GITHUB_WORKSPACE to place the built packages in
-    required: false
+    required: true
   buildpackage-opts:
     description: Options to be passed to dpkg-buildpackage
     required: false
   docker-image:
     default: debian:stable-slim
     description: Name of a Docker image to build inside
-    required: false
+    required: true
   extra-build-deps:
     description: Extra packages to be installed as build dependencies
     required: false
   source-dir:
     default: ''
     description: Path relative to $GITHUB_WORKSPACE that contains the package sources
-    required: false
+    required: true
 runs:
   using: composite
   steps:
