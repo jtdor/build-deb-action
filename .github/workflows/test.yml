@@ -156,6 +156,131 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  extra-repo-keys-ascii:
+    needs: [single-package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: download-keys
+        run: |
+          docker run --detach --mount="type=bind,src=${{ github.workspace }},dst=/workspace" --name=download-cont --rm --workdir=/workspace debian:stable-slim tail -f /dev/null
+          docker exec download-cont apt-get update
+          docker exec --user="$(id -u):$(id -g)" download-cont apt-get download debian-archive-keyring
+          docker stop --time=1 download-cont
+          dpkg-deb --extract debian-archive-keyring_*.deb debian-archive-keyring
+          {
+            printf 'debian-archive-keys<<EOF\n'
+            cat debian-archive-keyring/etc/apt/trusted.gpg.d/*.asc
+            printf 'EOF\n'
+          } >>"$GITHUB_OUTPUT"
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          docker-image: test/Dockerfile_extra-repo-keys
+          # An output value instead of an environment variable is used here to
+          # not interfere with Docker’s environment down the line.
+          extra-repo-keys: ${{ steps.download-keys.outputs.debian-archive-keys }}
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
+  extra-repo-keys-files:
+    needs: [single-package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: download-keys
+        run: |
+          docker run --detach --mount="type=bind,src=${{ github.workspace }},dst=/workspace" --name=download-cont --rm --workdir=/workspace debian:stable-slim tail -f /dev/null
+          docker exec download-cont apt-get update
+          docker exec --user="$(id -u):$(id -g)" download-cont apt-get download debian-archive-keyring
+          docker stop --time=1 download-cont
+          dpkg-deb --extract debian-archive-keyring_*.deb debian-archive-keyring
+          {
+            printf 'debian-archive-keys<<EOF\n'
+            ls -1 --directory debian-archive-keyring/etc/apt/trusted.gpg.d/*.asc
+            printf 'EOF\n'
+          } >>"$GITHUB_OUTPUT"
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          docker-image: test/Dockerfile_extra-repo-keys
+          # An output value instead of an environment variable is used here to
+          # not interfere with Docker’s environment down the line.
+          extra-repo-keys: ${{ steps.download-keys.outputs.debian-archive-keys }}
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
+  extra-repos:
+    needs: [setup-hook]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cat test/Makefile_extra-repos >>test/Makefile
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          extra-repos: |
+            # These are intentionally given as two entries:
+            deb http://deb.debian.org/debian stable contrib
+            deb http://deb.debian.org/debian stable non-free
+          setup-hook: |
+            apt-get update # Called here manually only for testing purposes!
+            ! apt-cache policy | grep -E ' *release.*[ ,]o=Debian[,$$]' | grep -E '[ ,]c=contrib[,$$]'
+            ! apt-cache policy | grep -E ' *release.*[ ,]o=Debian[,$$]' | grep -E '[ ,]c=non-free[,$$]'
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
+  extra-repos-deb822:
+    needs: [setup-hook]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cat test/Makefile_extra-repos >>test/Makefile
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          extra-repos: |
+            # These are intentionally given as two entries:
+            Types: deb
+            URIs: http://deb.debian.org/debian
+            Suites: stable
+            Components: contrib
+
+            Types: deb
+            URIs: http://deb.debian.org/debian
+            Suites: stable
+            Components: non-free
+          setup-hook: |
+            apt-get update # Called here manually only for testing purposes!
+            ! apt-cache policy | grep -E ' *release.*[ ,]o=Debian[,$$]' | grep -E '[ ,]c=contrib[,$$]'
+            ! apt-cache policy | grep -E ' *release.*[ ,]o=Debian[,$$]' | grep -E '[ ,]c=non-free[,$$]'
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   full-build:
     runs-on: ubuntu-latest
     steps:

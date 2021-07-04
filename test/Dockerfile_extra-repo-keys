@@ -1,0 +1,3 @@
+FROM debian:stable-slim
+
+RUN rm /etc/apt/trusted.gpg.d/debian-archive-*.asc

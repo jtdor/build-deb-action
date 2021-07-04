@@ -24,6 +24,13 @@ fi
 # essential packages. It is reasonably safe to blindly assume it is installed.
 printf "man-db man-db/auto-update boolean false\n" | debconf-set-selections
 
+if printf "%s\n" "$INPUT_EXTRA_REPOS" | grep -q '^deb'; then
+	extra_repos_ext=.list
+else
+	extra_repos_ext=.sources
+fi
+printf "%s\n" "$INPUT_EXTRA_REPOS" >"/etc/apt/sources.list.d/build-deb-action${extra_repos_ext}"
+
 apt-get update
 
 # shellcheck disable=SC2086

@@ -95,6 +95,25 @@ settings are required.
 
 Optional and empty by default.
 
+#### `extra-repos`
+Extra APT repositories to configure as sources in the build environment.
+
+Entries can be given in either format supported by APT: one-line style or
+deb822 style, see
+[`man sources.list`](https://manpages.debian.org/sources.list.5).
+
+Optional and empty by default.
+
+#### `extra-repo-keys`
+Extra keys for APT to trust in the build environment. Useful in combination
+with [`extra-repos`](#extra-repos).
+
+The parameter can be used to pass either one or multiple ASCII-armored keys, or
+a newline-separated list of paths to key files in ASCII-armored or binary
+format. Paths to key files must be relative to the workspace.
+
+Optional and empty by default.
+
 #### `host-arch`
 The architecture packages are built for. If this parameter is set,
 cross-compilation is set up with `apt-get` and `dpkg-buildpackage` as described

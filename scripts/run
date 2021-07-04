@@ -46,6 +46,8 @@ build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXX
 trap clean_up EXIT INT HUP TERM
 
 env_file=$build_dir/env
+extra_repo_keys_file=$build_dir/build-deb-action.asc
+extra_repo_key_files_file=$build_dir/extra_repo_key_files
 gitconfig_file=$build_dir/gitconfig
 
 INPUT_ARTIFACTS_DIR=${INPUT_ARTIFACTS_DIR:-.}
@@ -58,6 +60,36 @@ INPUT_SOURCE_DIR=${INPUT_SOURCE_DIR:-.}
 if ! check_path_prefix "$INPUT_SOURCE_DIR" "$GITHUB_WORKSPACE"; then
 	error "source-dir is not in GITHUB_WORKSPACE"
 	exit 2
+fi
+
+touch "$extra_repo_key_files_file"
+if [ "$INPUT_EXTRA_REPO_KEYS" ]; then
+	printf '%s\n' "$INPUT_EXTRA_REPO_KEYS" >"$extra_repo_keys_file"
+
+	while read -r extra_repo_key_file; do
+		[ "$extra_repo_key_file" ] || continue
+
+		if [ ! -f "$extra_repo_key_file" ]; then
+			if [ -s "$extra_repo_key_files_file" ]; then
+				error "extra-repo-keys cannot contain both ASCII-armored keys and key file paths"
+				exit 2
+			fi
+
+			# Looks like (an) ASCII-armored key(s)
+			break
+		fi
+
+		if ! check_path_prefix "$extra_repo_key_file" "$GITHUB_WORKSPACE"; then
+			error "A path to a key file in extra-repo-keys is not in GITHUB_WORKSPACE"
+			exit 2
+		fi
+
+		printf '%s\n' "$extra_repo_key_file" >>"$extra_repo_key_files_file"
+	done <"$extra_repo_keys_file"
+
+	if [ ! -s "$extra_repo_key_files_file" ]; then
+		printf '/github/build/%s\n' "${extra_repo_keys_file##*/}" >"$extra_repo_key_files_file"
+	fi
 fi
 
 if [ -f "$INPUT_DOCKER_IMAGE" ]; then
@@ -77,9 +109,12 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 fi
 
 start_group "Starting build container"
-# Docker does not like variable values containing newlines in an --env-file.
+# Docker does not like variable values containing newlines in an --env-file, we
+# will pass them separately:
 env \
 	--unset=INPUT_BEFORE_BUILD_HOOK \
+	--unset=INPUT_EXTRA_REPO_KEYS \
+	--unset=INPUT_EXTRA_REPOS \
 	--unset=INPUT_SETUP_HOOK \
 	>"$env_file"
 
@@ -91,6 +126,7 @@ container_id=$(
 		--env-file="$env_file" \
 		--env=GITHUB_ACTION_PATH=/github/action \
 		--env=GITHUB_WORKSPACE=/github/workspace \
+		--env=INPUT_EXTRA_REPOS \
 		--mount="type=bind,src=${GITHUB_ACTION_PATH},dst=/github/action,ro" \
 		--mount="type=bind,src=${build_dir},dst=/github/build" \
 		--mount="type=bind,src=${GITHUB_WORKSPACE},dst=/github/workspace" \
@@ -103,6 +139,13 @@ container_id=$(
 end_group
 
 start_group "Setting up build container"
+while read -r extra_repo_key_file; do
+	docker exec "$container_id" install \
+		--mode=644 \
+		--target-directory=/etc/apt/trusted.gpg.d \
+		"$extra_repo_key_file"
+done <"$extra_repo_key_files_file"
+
 # git is always available here outside the build container, in the environment
 # of a run step.
 

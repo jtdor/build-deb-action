@@ -1,0 +1,5 @@
+
+.PHONY: test
+test:
+	apt-cache policy | grep -E ' *release.*[ ,]o=Debian[,$$]' | grep -E '[ ,]c=contrib[,$$]'
+	apt-cache policy | grep -E ' *release.*[ ,]o=Debian[,$$]' | grep -E '[ ,]c=non-free[,$$]'
