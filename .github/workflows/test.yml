@@ -51,6 +51,23 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  different-host-arch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          host-arch: i386
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_i386.deb
+          dpkg --contents debian/artifacts/test_1_i386.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_i386.buildinfo
+          test -f debian/artifacts/test_1_i386.changes
+
   multiple-packages:
     runs-on: ubuntu-latest
     steps:

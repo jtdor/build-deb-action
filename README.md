@@ -62,6 +62,20 @@ dependencies. To change this, pass `--install-recommends` in
 
 Optional and empty by default.
 
+#### `host-arch`
+The architecture packages are built for. If this parameter is set,
+cross-compilation is set up with `apt-get` and `dpkg-buildpackage` as described
+[in the Debian wiki](https://wiki.debian.org/CrossCompiling#Building_with_dpkg-buildpackage).
+
+Optional and defaults to the architecture the action is run on (likely amd64).
+
+Basic example for cross-compilation:
+```yaml
+- uses: jtdor/build-deb-action@v1
+  with:
+    host-arch: i386
+```
+
 #### `source-dir`
 Directory relative to the workspace that contains the package sources,
 especially the `debian/` subdirectory.
