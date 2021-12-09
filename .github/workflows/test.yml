@@ -1,6 +1,26 @@
 on: push
 
 jobs:
+  apt-opts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          # No real "test" here yet, unfortunately. Just watching if this input
+          # does break the build if used:
+          # TODO: Actually test, if this input works!
+          apt-opts: --install-recommends
+          buildpackage-opts: --build=binary --no-sign
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   default-source-dir:
     runs-on: ubuntu-latest
     steps:
