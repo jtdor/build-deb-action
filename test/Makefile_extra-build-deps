@@ -1,0 +1,4 @@
+
+.PHONY: test
+test:
+	test "$$(dpkg-query -f '$${db:Status-Abbrev}' -W libzt1)" = "ii "

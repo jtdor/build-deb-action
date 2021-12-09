@@ -68,6 +68,25 @@ jobs:
           test -f debian/artifacts/test_1_i386.buildinfo
           test -f debian/artifacts/test_1_i386.changes
 
+  extra-build-deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cat test/Makefile_extra-build-deps >> test/Makefile
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          # Install an extra package unlikely to be ever installed by default:
+          extra-build-deps: libzt1
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   multiple-packages:
     runs-on: ubuntu-latest
     steps:
