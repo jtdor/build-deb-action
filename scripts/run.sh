@@ -64,15 +64,17 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 		exit 2
 	fi
 
+	start_group "Building container image"
 	image_id_file=$(mktemp) || exit 1
 	docker build \
 		--file="$INPUT_DOCKER_IMAGE" \
 		--iidfile="$image_id_file" \
 		-- "$GITHUB_WORKSPACE/$(dirname -- "$INPUT_DOCKER_IMAGE")"
 	INPUT_DOCKER_IMAGE=$(cat "$image_id_file")
+	end_group
 fi
 
-start_group "Preparing build container"
+start_group "Starting build container"
 env > "$env_file"
 container_id=$(docker run \
 	--detach \
