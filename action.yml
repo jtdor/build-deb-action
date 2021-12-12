@@ -23,7 +23,7 @@ inputs:
     description: Foreign architecture to setup cross-compilation for
     required: false
   source-dir:
-    default: ''
+    default: ./
     description: Path relative to $GITHUB_WORKSPACE that contains the package sources
     required: true
 runs:
