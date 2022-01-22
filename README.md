@@ -48,8 +48,8 @@ Options to be passed to `dpkg-buildpackage`. See `man dpkg-buildpackage`.
 Optional and empty by default.
 
 #### `docker-image`
-Name of a (Debian-based) Docker image to build inside or path of a Dockerfile
-in GITHUB_WORKSPACE to build a container from.
+Name of a (Debian-based) Docker image to build packages inside or path of a
+Dockerfile in GITHUB_WORKSPACE to build a container from.
 
 Defaults to `debian:stable-slim`.
 
