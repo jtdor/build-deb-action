@@ -39,8 +39,7 @@ check_path_prefix()
 
 clean_up()
 {
-	rm --force -- "$env_file"
-	rm --force -- "${image_id_file-}"
+	rm --force -- "$env_file" "${image_id_file-}"
 }
 
 env_file=$(mktemp) || exit 1
