@@ -76,7 +76,7 @@ fi
 start_group "Starting build container"
 env > "$env_file"
 container_id=$(docker run \
-	--detach \
+	$INPUT_EXTRA_DOCKER_ARGS --detach \
 	--env-file="$env_file" \
 	--env=GITHUB_ACTION_PATH=/github/action \
 	--env=GITHUB_WORKSPACE=/github/workspace \

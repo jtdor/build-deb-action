@@ -16,6 +16,9 @@ inputs:
     default: debian:stable-slim
     description: Name of a Docker image to build inside or path of a Dockerfile
     required: true
+  extra-docker-args:
+    description: Additional arguments to 'docker run' of build container
+    required: false
   extra-build-deps:
     description: Extra packages to be installed as build dependencies
     required: false
@@ -37,6 +40,7 @@ runs:
         INPUT_BUILDPACKAGE_OPTS: ${{ inputs.buildpackage-opts }}
         INPUT_HOST_ARCH: ${{ inputs.host-arch }}
         INPUT_DOCKER_IMAGE: ${{ inputs.docker-image }}
+        INPUT_EXTRA_DOCKER_ARGS: ${{ inputs.extra-docker-args }}
         INPUT_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
         INPUT_SOURCE_DIR: ${{ inputs.source-dir }}
       run: ${{ github.action_path }}/scripts/run.sh

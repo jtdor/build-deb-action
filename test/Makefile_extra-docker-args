@@ -1,0 +1,11 @@
+
+.PHONY: test
+EXTRA_ARG_IP := $(shell grep extra-args-test /etc/hosts | awk '{print $$1}')
+
+test:
+	$(info $$EXTRA_ARG_IP = $(EXTRA_ARG_IP))
+ifeq ($(EXTRA_ARG_IP),127.0.0.1)
+	$(info Found extra Docker arg in /etc/hosts with value $(EXTRA_ARG_IP))
+else
+	$(error Expected Docker extra argument not found)
+endif
