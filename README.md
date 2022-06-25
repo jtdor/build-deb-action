@@ -42,6 +42,26 @@ artifacts will be moved to.
 
 Defaults to `debian/artifacts` in the workspace.
 
+#### `build-dep-cache-dir`
+Directory relative to the workspace where downloaded build dependencies are
+cached. Can be used together with
+[actions/cache](https://github.com/marketplace/actions/cache) to cache build
+dependencies between workflow runs.
+
+Example usage:
+```yaml
+- uses: actions/cache@v3
+  with:
+    key: ${{ github.job }}-${{ hashFiles('debian/control') }}
+    path: debian/build-dep-cache
+- uses: jtdor/build-deb-action@v1
+```
+You have to ensure to use a cache key that is unique to each of your
+jobs/workflows and changes when your build dependencies change (the
+`debian/control` file changes).
+
+Defaults to `debian/build-dep-cache` in the workspace.
+
 #### `buildpackage-opts`
 Options to be passed to `dpkg-buildpackage`. See `man dpkg-buildpackage`.
 

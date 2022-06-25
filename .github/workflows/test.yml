@@ -128,6 +128,30 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  fill-build-dep-cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          # For testing purposes, the key is unique to each and every workflow
+          # run. Do not use this in a real workflow.
+          key: ${{ github.sha }}-${{ github.run_attempt }}
+          path: debian/build-dep-cache
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          build-dep-cache-dir: debian/build-dep-cache
+          buildpackage-opts: --build=binary --no-sign
+          source-dir: test
+      - run: |
+          test -n "$(ls debian/build-dep-cache/archives/*.deb)"
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   local-dockerfile:
     runs-on: ubuntu-latest
     steps:
@@ -174,6 +198,32 @@ jobs:
           source-dir: test
       - run: |
           test "$(ls -1 debian/artifacts/*.deb | wc -l)" = 1
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
+  use-build-dep-cache:
+    needs: fill-build-dep-cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v3
+        with:
+          # For testing purposes, the key is unique to each and every workflow
+          # run. Do not use this in a real workflow.
+          key: ${{ github.sha }}-${{ github.run_attempt }}
+          path: debian/build-dep-cache
+      - run: test -n "$(ls debian/build-dep-cache/archives/*.deb)"
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          build-dep-cache-dir: debian/build-dep-cache
+          buildpackage-opts: --build=binary --no-sign
+          source-dir: test
+      - run: |
+          test -n "$(ls debian/build-dep-cache/archives/*.deb)"
           dpkg --info debian/artifacts/test_1_amd64.deb
           dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
           test -f debian/artifacts/test_1_amd64.buildinfo

@@ -19,7 +19,20 @@ if [ -n "$INPUT_HOST_ARCH" ]; then
 	printf 'APT::Get::Host-Architecture "%s";\n' "$INPUT_HOST_ARCH" >> "$APT_CONF_FILE"
 fi
 
+# Debian-based Docker images usually contain a configuration file that makes
+# the APT cache get immediately cleaned after installations. We don’t want that
+# here.
+rm -f -- /etc/apt/apt.conf.d/docker-clean
+
+if [ -n "$INPUT_BUILD_DEP_CACHE_DIR" ]; then
+	mkdir --parents -- "$INPUT_BUILD_DEP_CACHE_DIR"
+	printf 'Dir::Cache "%s";\n' "$INPUT_BUILD_DEP_CACHE_DIR" >> "$APT_CONF_FILE"
+fi
+
 apt-get update
+
+# Remove cached packages that turn out to be outdated after `apt-get update`
+apt-get autoclean
 
 # shellcheck disable=SC2086
 apt-get build-dep $INPUT_APT_OPTS -- "./$INPUT_SOURCE_DIR"
@@ -29,3 +42,9 @@ apt-get build-dep $INPUT_APT_OPTS -- "./$INPUT_SOURCE_DIR"
 # But let’s be explicit here.
 # shellcheck disable=SC2086
 apt-get install $INPUT_APT_OPTS -- dpkg-dev $INPUT_EXTRA_BUILD_DEPS
+
+if [ -n "$INPUT_BUILD_DEP_CACHE_DIR" ]; then
+	rm -fr -- \
+		"${INPUT_BUILD_DEP_CACHE_DIR}/archives/lock" \
+		"${INPUT_BUILD_DEP_CACHE_DIR}/archives/partial"
+fi

@@ -51,6 +51,15 @@ if ! check_path_prefix "$INPUT_ARTIFACTS_DIR" "$GITHUB_WORKSPACE"; then
 	exit 2
 fi
 
+if [ -n "$INPUT_BUILD_DEP_CACHE_DIR" ] && ! check_path_prefix "$INPUT_BUILD_DEP_CACHE_DIR" "$GITHUB_WORKSPACE"; then
+	error "build-dep-cache-dir is not in GITHUB_WORKSPACE"
+	exit 2
+fi
+
+if [ -n "$INPUT_BUILD_DEP_CACHE_DIR" ]; then
+	INPUT_BUILD_DEP_CACHE_DIR=/github/workspace/$INPUT_BUILD_DEP_CACHE_DIR
+fi
+
 INPUT_SOURCE_DIR=${INPUT_SOURCE_DIR:-.}
 if ! check_path_prefix "$INPUT_SOURCE_DIR" "$GITHUB_WORKSPACE"; then
 	error "source-dir is not in GITHUB_WORKSPACE"
