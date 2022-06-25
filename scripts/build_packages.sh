@@ -13,4 +13,5 @@ if [ -n "$INPUT_HOST_ARCH" ]; then
 fi
 
 cd -- "$INPUT_SOURCE_DIR"
+# shellcheck disable=SC2086
 dpkg-buildpackage $INPUT_BUILDPACKAGE_OPTS

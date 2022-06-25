@@ -75,6 +75,7 @@ fi
 
 start_group "Starting build container"
 env > "$env_file"
+# shellcheck disable=SC2086
 container_id=$(docker run \
 	$INPUT_EXTRA_DOCKER_ARGS \
 	--detach \
