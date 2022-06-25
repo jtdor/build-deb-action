@@ -20,7 +20,7 @@ inputs:
     description: Extra packages to be installed as build dependencies
     required: false
   extra-docker-args:
-    description: Additional arguments to 'docker run' of build container
+    description: Additional arguments to 'docker run' when starting the build container
     required: false
   host-arch:
     description: Foreign architecture to setup cross-compilation for
