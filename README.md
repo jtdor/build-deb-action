@@ -53,14 +53,6 @@ Dockerfile in GITHUB_WORKSPACE to build a container from.
 
 Defaults to `debian:stable-slim`.
 
-#### `extra-docker-args`
-Additional command line arguments passed to Docker container execution. This
-might be needed if specific volumes or network settings are required.
-
-*NOTE*: this will not override the action's default arguments.
-
-Optional and empty by default.
-
 #### `extra-build-deps`
 Extra packages to be installed as “build dependencies”. *This should rarely be
 used, build dependencies should be specified in the `debian/control` file.*
@@ -68,6 +60,13 @@ used, build dependencies should be specified in the `debian/control` file.*
 By default, these packages are installed without their recommended
 dependencies. To change this, pass `--install-recommends` in
 [`apt-opts`](#apt-opts).
+
+Optional and empty by default.
+
+#### `extra-docker-args`
+Additional command-line arguments passed to `docker run` when the build
+container is started. This might be needed if specific volumes or network
+settings are required.
 
 Optional and empty by default.
 
