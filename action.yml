@@ -19,6 +19,9 @@ inputs:
   extra-build-deps:
     description: Extra packages to be installed as build dependencies
     required: false
+  extra-docker-args:
+    description: Additional arguments to 'docker run' when starting the build container
+    required: false
   host-arch:
     description: Foreign architecture to setup cross-compilation for
     required: false
@@ -38,6 +41,7 @@ runs:
         INPUT_HOST_ARCH: ${{ inputs.host-arch }}
         INPUT_DOCKER_IMAGE: ${{ inputs.docker-image }}
         INPUT_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
+        INPUT_EXTRA_DOCKER_ARGS: ${{ inputs.extra-docker-args }}
         INPUT_SOURCE_DIR: ${{ inputs.source-dir }}
       run: ${{ github.action_path }}/scripts/run.sh
       shell: bash

@@ -63,6 +63,13 @@ dependencies. To change this, pass `--install-recommends` in
 
 Optional and empty by default.
 
+#### `extra-docker-args`
+Additional command-line arguments passed to `docker run` when the build
+container is started. This might be needed if specific volumes or network
+settings are required.
+
+Optional and empty by default.
+
 #### `host-arch`
 The architecture packages are built for. If this parameter is set,
 cross-compilation is set up with `apt-get` and `dpkg-buildpackage` as described
