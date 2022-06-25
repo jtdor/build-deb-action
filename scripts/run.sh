@@ -85,7 +85,7 @@ container_id=$(docker run \
 	--volume="$GITHUB_ACTION_PATH":/github/action \
 	--volume="$GITHUB_WORKSPACE":/github/workspace \
 	--workdir=/github/workspace \
-	-- "$INPUT_DOCKER_IMAGE" tail -f /dev/null \
+	-- "$INPUT_DOCKER_IMAGE" tail -f /dev/null
 )
 end_group
 
