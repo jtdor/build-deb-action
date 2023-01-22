@@ -27,5 +27,12 @@ apt-get build-dep $INPUT_APT_OPTS -- "./$INPUT_SOURCE_DIR"
 # In theory, explicitly installing dpkg-dev would not be necessary. `apt-get
 # build-dep` will *always* install build-essential which depends on dpkg-dev.
 # But let’s be explicit here.
+if [ "$INPUT_USE_DEBUILD" = "true" ]; then
+	INPUT_EXTRA_BUILD_DEPS="${INPUT_EXTRA_BUILD_DEPS:=""} devscripts"
+	# trim string
+	# shellcheck disable=SC2086
+	INPUT_EXTRA_BUILD_DEPS=$(echo $INPUT_EXTRA_BUILD_DEPS | sed 's/ *$//g')
+fi
+
 # shellcheck disable=SC2086
-apt-get install $INPUT_APT_OPTS -- dpkg-dev $INPUT_EXTRA_BUILD_DEPS
+apt-get install "${INPUT_APT_OPTS}" -- dpkg-dev ${INPUT_EXTRA_BUILD_DEPS}

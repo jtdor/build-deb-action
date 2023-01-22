@@ -9,6 +9,14 @@ inputs:
     default: debian/artifacts
     description: Directory path relative to $GITHUB_WORKSPACE to place the built packages in
     required: true
+  use-debuild:
+    default: 'false'
+    required: true
+    description: If true, debuild is used to create the debian package. Otherwise, dpkg-buildpackage is used
+  debuild-opts:
+    default: '-b -rfakeroot -us -uc'
+    required: true
+    description: Options to be passed to debuild
   buildpackage-opts:
     description: Options to be passed to dpkg-buildpackage
     required: false
@@ -43,6 +51,8 @@ runs:
         INPUT_EXTRA_DOCKER_ARGS: ${{ inputs.extra-docker-args }}
         INPUT_HOST_ARCH: ${{ inputs.host-arch }}
         INPUT_SOURCE_DIR: ${{ inputs.source-dir }}
+        INPUT_USE_DEBUILD: ${{ inputs.use-debuild }}
+        INPUT_DEBUILD_OPTS: ${{ inputs.debuild-opts }}
       run: ${{ github.action_path }}/scripts/run.sh
       shell: bash
 branding:

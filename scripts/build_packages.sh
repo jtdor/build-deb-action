@@ -13,5 +13,11 @@ if [ -n "$INPUT_HOST_ARCH" ]; then
 fi
 
 cd -- "$INPUT_SOURCE_DIR"
-# shellcheck disable=SC2086
-dpkg-buildpackage $INPUT_BUILDPACKAGE_OPTS
+
+if [ "$INPUT_USE_DEBUILD" = "true" ]; then
+	# shellcheck disable=SC2086
+	debuild ${INPUT_DEBUILD_OPTS}
+else
+	# shellcheck disable=SC2086
+	dpkg-buildpackage $INPUT_BUILDPACKAGE_OPTS
+fi

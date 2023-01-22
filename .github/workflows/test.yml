@@ -177,3 +177,20 @@ jobs:
           dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
+
+  debuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          use-debuild: true
+          source-dir: test
+      - run: |
+          test "$(ls -1 debian/artifacts/*.deb | wc -l)" = 1
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
