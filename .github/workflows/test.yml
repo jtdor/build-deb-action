@@ -7,7 +7,7 @@ jobs:
   apt-opts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -27,7 +27,7 @@ jobs:
   default-source-dir:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: cp -r test/* .
       - uses: ./
         env:
@@ -43,7 +43,7 @@ jobs:
   different-artifacts-dir:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -60,7 +60,7 @@ jobs:
   different-docker-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -77,7 +77,7 @@ jobs:
   different-host-arch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -94,7 +94,7 @@ jobs:
   extra-build-deps:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: cat test/Makefile_extra-build-deps >> test/Makefile
       - uses: ./
         env:
@@ -113,7 +113,7 @@ jobs:
   extra-docker-args:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: cat test/Makefile_extra-docker-args >> test/Makefile
       - uses: ./
         env:
@@ -131,7 +131,7 @@ jobs:
   local-dockerfile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: cat test/Makefile_local-dockerfile >> test/Makefile
       - uses: ./
         env:
@@ -149,7 +149,7 @@ jobs:
   multiple-packages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./
         with:
           buildpackage-opts: --build=binary --no-sign
@@ -165,7 +165,7 @@ jobs:
   single-package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
