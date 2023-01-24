@@ -12,10 +12,7 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          # No real "test" here yet, unfortunately. Just watching if this input
-          # does break the build if used:
-          # TODO: Actually test, if this input works!
-          apt-opts: --install-recommends
+          apt-opts: --install-recommends --no-install-suggests
           buildpackage-opts: --build=binary --no-sign
           source-dir: test
       - run: |
