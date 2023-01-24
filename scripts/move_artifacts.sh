@@ -14,14 +14,6 @@ mv_artifact()
 }
 
 # Usage:
-#   mv_other_artifact BUILDINFO_PATH OTHER_EXT DEST_DIR
-mv_other_artifact()
-{
-	a=${1%.buildinfo}$2
-	[ ! -f "$a" ] || mv_artifact "$a" "$3"
-}
-
-# Usage:
 #   mv_source_package CHANGES_FILE
 mv_source_package()
 {
