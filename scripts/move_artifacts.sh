@@ -39,8 +39,9 @@ while read -r l; do
 	mv_artifact "$artifact" "$INPUT_ARTIFACTS_DIR"
 	case "$artifact" in
 		*.buildinfo)
-			mv_source_package "${artifact%.buildinfo}.changes"
-			mv_other_artifact "$artifact" .changes "$INPUT_ARTIFACTS_DIR"
+			changes_file=${artifact%.buildinfo}.changes
+			mv_source_package "$changes_file"
+			mv_artifact "$changes_file" "$INPUT_ARTIFACTS_DIR"
 			;;
 	esac
 done < "$INPUT_SOURCE_DIR/debian/files"
