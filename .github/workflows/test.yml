@@ -127,6 +127,24 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  full-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=full --no-sign
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1.dsc
+          test -f debian/artifacts/test_1.tar.xz
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   local-dockerfile:
     runs-on: ubuntu-latest
     steps:
@@ -177,3 +195,18 @@ jobs:
           dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
+
+  source-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        with:
+          buildpackage-opts: --build=source --no-sign
+          source-dir: test
+      - run: |
+          ! ls -1 debian/artifacts/*.deb 2>/dev/null
+          test -f debian/artifacts/test_1.dsc
+          test -f debian/artifacts/test_1.tar.xz
+          test -f debian/artifacts/test_1_source.buildinfo
+          test -f debian/artifacts/test_1_source.changes
