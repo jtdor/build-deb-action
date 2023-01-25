@@ -1,14 +1,14 @@
 # Build Debian Packages GitHub Action
 
-This action builds Debian packages in a flexible environment.
+This action builds Debian packages in a clean, flexible environment.
 
 It is mainly a shell wrapper around `dpkg-buildpackage`, using a configurable
 Docker image to install build dependencies in and build packages. Resulting
 .deb files and other build artifacts are moved to a specified place.
 
-In some aspects, this action is comparable to `pbuilder` or `sbuild` (and it
-might be desireable to use those here in the future, instead of manually
-setting up a build environment and calling `dpkg-buildpackage`).
+In some aspects, this action is comparable to `pbuilder` and `sbuild`. It uses
+Docker containers instead of chroots, though, to set up the clean, predefined
+build environment.
 
 ## Usage
 ### Basic Example
