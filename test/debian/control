@@ -2,7 +2,7 @@ Source: test
 Section: unknown
 Priority: optional
 Maintainer: Jörn-Thorben Hinz <jtdor@users.noreply.github.com>
-Build-Depends: debhelper-compat (= 11)
+Build-Depends: debhelper-compat (= 13)
 Standards-Version: 4.5.0
 Rules-Requires-Root: no
 
