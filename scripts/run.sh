@@ -71,7 +71,7 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 		--file="$INPUT_DOCKER_IMAGE" \
 		--iidfile="$image_id_file" \
 		-- "$GITHUB_WORKSPACE/$(dirname -- "$INPUT_DOCKER_IMAGE")"
-	INPUT_DOCKER_IMAGE=$(cat "$image_id_file")
+	read -r INPUT_DOCKER_IMAGE < "$image_id_file" || :
 	end_group
 fi
 
