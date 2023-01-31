@@ -39,11 +39,13 @@ check_path_prefix()
 
 clean_up()
 {
-	rm --force -- "$env_file" "${image_id_file-}"
+	rm --force --recursive -- "${build_dir-}"
 }
 
-env_file=$(mktemp) || exit 1
+build_dir=$(mktemp --directory) || exit 1
 trap clean_up EXIT INT HUP TERM
+
+env_file=$build_dir/env
 
 INPUT_ARTIFACTS_DIR=${INPUT_ARTIFACTS_DIR:-.}
 if ! check_path_prefix "$INPUT_ARTIFACTS_DIR" "$GITHUB_WORKSPACE"; then
@@ -64,7 +66,7 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 	fi
 
 	start_group "Building container image"
-	image_id_file=$(mktemp) || exit 1
+	image_id_file=$build_dir/image_id
 	docker build \
 		--file="$INPUT_DOCKER_IMAGE" \
 		--iidfile="$image_id_file" \
