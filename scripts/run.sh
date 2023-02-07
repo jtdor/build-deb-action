@@ -42,7 +42,7 @@ clean_up()
 	rm --force --recursive -- "${build_dir-}"
 }
 
-build_dir=$(mktemp --directory) || exit 1
+build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX) || exit 1
 trap clean_up EXIT INT HUP TERM
 
 env_file=$build_dir/env
