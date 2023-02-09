@@ -42,6 +42,27 @@ artifacts will be moved to.
 
 Defaults to `debian/artifacts` in the workspace.
 
+#### `before-build-hook`
+Shell command(s) to be executed after installing the build dependencies and right
+before `dpkg-buildpackage` is executed. A single or multiple commands can be
+given, same as for a
+[`run` step](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun)
+in a workflow.
+
+The hook is executed with `sh -c` *inside* the build container. The package
+contents from the build dependencies and [`extra-build-deps`](#extra-build-deps)
+are available.
+
+Optional and empty by default.
+
+Example use case:
+```yaml
+- uses: jtdor/build-deb-action@v1
+  with:
+    before-build-hook: debchange --controlmaint --local="+$(git describe --tags)" "CI build"
+    extra-build-deps: devscripts
+```
+
 #### `buildpackage-opts`
 Options to be passed to `dpkg-buildpackage`. See `man dpkg-buildpackage`.
 

@@ -76,7 +76,9 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 fi
 
 start_group "Starting build container"
-env > "$env_file"
+# Docker does not like variable values containing newlines in an --env-file.
+env --unset=INPUT_BEFORE_BUILD_HOOK > "$env_file"
+
 # shellcheck disable=SC2086
 container_id=$(docker run \
 	$INPUT_EXTRA_DOCKER_ARGS \
@@ -95,6 +97,12 @@ end_group
 start_group "Installing build dependencies"
 docker exec "$container_id" /github/action/scripts/install_build_deps.sh
 end_group
+
+if [ -n "$INPUT_BEFORE_BUILD_HOOK" ]; then
+	start_group "Executing before-build hook"
+	docker exec "$container_id" /bin/sh -c "$INPUT_BEFORE_BUILD_HOOK"
+	end_group
+fi
 
 start_group "Building package"
 docker exec "$container_id" /github/action/scripts/build_packages.sh

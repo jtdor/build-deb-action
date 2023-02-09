@@ -23,6 +23,27 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  before-build-hook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          before-build-hook: |
+            cd test
+            dch --maintmaint --newversion 2 "Version 2"
+            dch --maintmaint --release ""
+          buildpackage-opts: --build=binary --no-sign
+          extra-build-deps: devscripts
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_2_amd64.deb
+          dpkg --contents debian/artifacts/test_2_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_2_amd64.buildinfo
+          test -f debian/artifacts/test_2_amd64.changes
+
   default-source-dir:
     runs-on: ubuntu-latest
     steps:
