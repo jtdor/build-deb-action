@@ -1,3 +1,6 @@
+[![Linting](https://github.com/jtdor/build-deb-action/actions/workflows/lint.yml/badge.svg)](https://github.com/jtdor/build-deb-action/actions/workflows/lint.yml)
+[![Testing](https://github.com/jtdor/build-deb-action/actions/workflows/test.yml/badge.svg)](https://github.com/jtdor/build-deb-action/actions/workflows/test.yml)
+
 # Build Debian Packages GitHub Action
 
 This action builds Debian packages in a clean, flexible environment.
