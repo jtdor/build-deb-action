@@ -9,7 +9,7 @@ mv_artifact()
 	ad=$(dirname "$1")
 	if [ "$(realpath -- "$ad")" != "$(realpath -- "$2")" ]; then
 		mv -- "$1" "$2"
-		echo "Moved $(basename -- "$1")"
+		echo "Moved '$(basename -- "$1")'"
 	fi
 }
 
