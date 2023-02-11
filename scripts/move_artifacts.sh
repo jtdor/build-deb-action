@@ -10,6 +10,8 @@ mv_artifact()
 	if [ "$(realpath -- "$ad")" != "$(realpath -- "$2")" ]; then
 		mv -- "$1" "$2"
 		echo "Moved '${1##*/}'"
+	else
+		printf "Not moving '%s', already in the right directory\n" "${1##*/}"
 	fi
 }
 
