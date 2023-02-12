@@ -1,41 +1,81 @@
-#!/bin/sh
+#!/usr/bin/perl
+#
+# This script should only depend on packages perl-base (essential) and
+# libdpkg-perl.
+#
 
-set -eu
+use strict;
+use warnings;
 
-# Usage:
-#   mv_artifact ARTIFACT_PATH DEST_DIR
-mv_artifact()
-{
-	ad=$(dirname "$1")
-	if [ "$(realpath -- "$ad")" != "$(realpath -- "$2")" ]; then
-		mv -- "$1" "$2"
-		echo "Moved '${1##*/}'"
-	else
-		printf "Not moving '%s', already in the right directory\n" "${1##*/}"
-	fi
+use feature 'say';
+
+use Cwd qw(abs_path);
+use Dpkg::Checksums;
+use Dpkg::Control;
+use File::Basename qw(basename);
+use File::Copy;
+use File::Path qw(make_path);
+use File::Spec;
+
+my $input_artifacts_dir = $ENV{INPUT_ARTIFACTS_DIR};
+my $input_source_dir    = $ENV{INPUT_SOURCE_DIR};
+my $artifacts_src_dir   = File::Spec->catfile( $input_source_dir, q{..} );
+my $changes_filename;
+my $rc = 0;
+
+open my $files_fh, '<', File::Spec->catfile( $input_source_dir, 'debian/files' )
+  or die "Failed to open debian/files: $!";
+while (<$files_fh>) {
+    if (/^([\w]+.buildinfo) .*/) {
+        $changes_filename = $1 =~ s/[.]buildinfo$/.changes/r;
+        last;
+    }
+}
+close $files_fh or warn 'Failed to close debian/files';
+
+die 'Did not find the .buildinfo file in debian/files'
+  if not defined $changes_filename;
+my $changes_file = File::Spec->catfile( $artifacts_src_dir, $changes_filename );
+
+my $changes = Dpkg::Control->new( type => CTRL_FILE_CHANGES );
+$changes->load($changes_file);
+
+my $checksums = Dpkg::Checksums->new();
+$checksums->add_from_control($changes);
+
+my @artifacts = sort $changes_filename, $checksums->get_files();
+
+if ( !-e $input_artifacts_dir ) {
+    make_path( $input_artifacts_dir, { error => \my $mkdir_err } );
+    if ( $mkdir_err && @{$mkdir_err} ) {
+
+        # Hopefully staying compatible with slightly older Perl (before
+        # v5.20.0) by not using postfix dereferencing below.
+        die "Failed to create artifacts-dir '$input_artifacts_dir': "
+          . ( %{ @{$mkdir_err}[0] } )[1];
+    }
+}
+elsif ( !-d $input_artifacts_dir ) {
+    die "artifacts-dir '$input_artifacts_dir' exists but is not a directory";
 }
 
-# Usage:
-#   mv_source_package CHANGES_FILE
-mv_source_package()
-{
-	for ext in .dsc '.tar.[[:alnum:]]\+'; do
-		src_artifact=$INPUT_SOURCE_DIR/../$(grep \
-			--max-count=1 --only-matching "[[:graph:]]\+$ext" "$1") || continue
-		mv_artifact "$src_artifact" "$INPUT_ARTIFACTS_DIR"
-	done
+if ( abs_path($artifacts_src_dir) ne abs_path($input_artifacts_dir) ) {
+    for my $artifact (@artifacts) {
+        my $artifact_file =
+          File::Spec->catfile( $artifacts_src_dir, $artifact );
+        if ( move( $artifact_file, $input_artifacts_dir ) ) {
+            say "Moved '$artifact'";
+        }
+        else {
+            warn "Failed to move '$artifact': $!";
+            $rc = 1;
+        }
+    }
+}
+else {
+    for (@artifacts) {
+        say "Not moving '$_', already in the right directory";
+    }
 }
 
-mkdir --parents -- "$INPUT_ARTIFACTS_DIR"
-
-while read -r l; do
-	artifact=$INPUT_SOURCE_DIR/../${l%% *}
-	mv_artifact "$artifact" "$INPUT_ARTIFACTS_DIR"
-	case "$artifact" in
-		*.buildinfo)
-			changes_file=${artifact%.buildinfo}.changes
-			mv_source_package "$changes_file"
-			mv_artifact "$changes_file" "$INPUT_ARTIFACTS_DIR"
-			;;
-	esac
-done < "$INPUT_SOURCE_DIR/debian/files"
+exit $rc;
