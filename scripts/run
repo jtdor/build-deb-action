@@ -95,7 +95,7 @@ container_id=$(docker run \
 end_group
 
 start_group "Installing build dependencies"
-docker exec "$container_id" /github/action/scripts/install_build_deps.sh
+docker exec "$container_id" /github/action/scripts/install_build_deps
 end_group
 
 if [ -n "$INPUT_BEFORE_BUILD_HOOK" ]; then
@@ -105,11 +105,11 @@ if [ -n "$INPUT_BEFORE_BUILD_HOOK" ]; then
 fi
 
 start_group "Building package"
-docker exec "$container_id" /github/action/scripts/build_packages.sh
+docker exec "$container_id" /github/action/scripts/build_packages
 end_group
 
 start_group "Moving artifacts"
-docker exec "$container_id" /github/action/scripts/move_artifacts.sh
+docker exec "$container_id" /github/action/scripts/move_artifacts
 end_group
 
 start_group "Stopping build container"
