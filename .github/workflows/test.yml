@@ -200,6 +200,28 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  # Regression test following issue #3 (“Did not find the .buildinfo file in
+  # debian/files”)
+  non-trivial-package-version:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          sed -i '1 s/\(1\)/4.3.2-1+final~42-5.deb+long~version/' test/debian/changelog
+          sed -i 's/native/quilt/' test/debian/source/format
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          artifacts-dir: .
+          buildpackage-opts: --build=binary --no-sign
+          source-dir: test
+      - run: |
+          dpkg --info test_4.3.2-1+final~42-5.deb+long~version_amd64.deb
+          dpkg --contents test_4.3.2-1+final~42-5.deb+long~version_amd64.deb | grep ./usr/bin/mybin
+          test -f test_4.3.2-1+final~42-5.deb+long~version_amd64.buildinfo
+          test -f test_4.3.2-1+final~42-5.deb+long~version_amd64.changes
+
   not-moving-artifacts:
     runs-on: ubuntu-latest
     steps:

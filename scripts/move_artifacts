@@ -25,7 +25,19 @@ my $rc = 0;
 open my $files_fh, '<', File::Spec->catfile( $input_source_dir, 'debian/files' )
   or die "Failed to open debian/files: $!";
 while (<$files_fh>) {
-    if (/^([\w]+.buildinfo) .*/) {
+
+    # Following the Debian policy, a (source) package name can contain “lower
+    # case letters (a-z), digits (0-9), plus (+) and minus (-) signs, and
+    # periods (.)”[1] and the version additionally a colon (:) and “the
+    # characters . + - ~ (full stop, plus, hyphen, tilde)”[2]. An architecture
+    # contains alphanumeric, lower case characters. Package name, version, and
+    # architecture are separated by underscores (_).
+    #
+    # The simpler `/^([^ ]+.buildinfo) .*/` would also be sufficient here.
+    #
+    # [1] https://www.debian.org/doc/debian-policy/ch-controlfields.html#source
+    # [2] https://www.debian.org/doc/debian-policy/ch-controlfields.html#version
+    if (/^([a-z0-9:.+~_-]+.buildinfo) .*/) {
         $changes_filename = $1 =~ s/[.]buildinfo$/.changes/r;
         last;
     }
