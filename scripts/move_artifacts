@@ -47,6 +47,7 @@ close $files_fh or warn 'Failed to close debian/files';
 die 'Did not find the .buildinfo file in debian/files'
   if not defined $changes_filename;
 my $changes_file = File::Spec->catfile( $artifacts_src_dir, $changes_filename );
+die 'Cannot find the .changes file' if !-e $changes_file;
 
 my $changes = Dpkg::Control->new( type => CTRL_FILE_CHANGES );
 $changes->load($changes_file);
