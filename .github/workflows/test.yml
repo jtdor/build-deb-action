@@ -166,6 +166,30 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  git-as-root-in-hook:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          before-build-hook: |
+            cd test
+            # Using `git rev-parse` here instead of github.sha to specifically
+            # test the git usage.
+            rev=$(git rev-parse HEAD)
+            dch --maintmaint --newversion "1+$rev" "Version 1+$rev"
+            dch --maintmaint --release ""
+          buildpackage-opts: --build=binary --no-sign
+          extra-build-deps: devscripts git
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1+${{ github.sha }}_amd64.deb
+          dpkg --contents debian/artifacts/test_1+${{ github.sha }}_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1+${{ github.sha }}_amd64.buildinfo
+          test -f debian/artifacts/test_1+${{ github.sha }}_amd64.changes
+
   local-dockerfile:
     runs-on: ubuntu-latest
     steps:

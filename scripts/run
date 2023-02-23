@@ -46,6 +46,7 @@ build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXX
 trap clean_up EXIT INT HUP TERM
 
 env_file=$build_dir/env
+gitconfig_file=$build_dir/gitconfig
 
 INPUT_ARTIFACTS_DIR=${INPUT_ARTIFACTS_DIR:-.}
 if ! check_path_prefix "$INPUT_ARTIFACTS_DIR" "$GITHUB_WORKSPACE"; then
@@ -88,10 +89,27 @@ container_id=$(docker run \
 	--env=GITHUB_WORKSPACE=/github/workspace \
 	--rm \
 	--volume="$GITHUB_ACTION_PATH":/github/action:ro \
+	--volume="$build_dir":/github/build \
 	--volume="$GITHUB_WORKSPACE":/github/workspace \
 	--workdir=/github/workspace \
 	-- "$INPUT_DOCKER_IMAGE" tail -f /dev/null
 )
+end_group
+
+start_group "Setting up build container"
+# git is always available here outside the build container, in the environment
+# of a run step.
+
+# To simplify the usage of git from a hook, we mark all directories as safe.
+# Otherwise git would complain, since a hook is run as root but the workspace
+# repository belongs to a different user.
+git config --file="$gitconfig_file" safe.directory '*'
+
+docker exec "$container_id" install \
+	--mode=644 \
+	--no-target-directory \
+	/github/build/gitconfig \
+	/etc/gitconfig
 end_group
 
 start_group "Installing build dependencies"
