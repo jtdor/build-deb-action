@@ -63,7 +63,7 @@ Example use case:
 - uses: jtdor/build-deb-action@v1
   with:
     before-build-hook: debchange --controlmaint --local="+$(git describe --tags)" "CI build"
-    extra-build-deps: devscripts
+    extra-build-deps: devscripts git
 ```
 
 #### `buildpackage-opts`
