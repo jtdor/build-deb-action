@@ -62,7 +62,7 @@ Example use case:
 ```yaml
 - uses: jtdor/build-deb-action@v1
   with:
-    before-build-hook: debchange --controlmaint --local="+$(git describe --tags)" "CI build"
+    before-build-hook: debchange --controlmaint --local="+ci${{ github.run_id }}~git$(git rev-parse --short HEAD)" "CI build"
     extra-build-deps: devscripts git
 ```
 
