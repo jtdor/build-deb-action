@@ -9,6 +9,7 @@ export DEBIAN_FRONTEND=noninteractive
 cat > "$APT_CONF_FILE" <<-EOF
 	APT::Get::Assume-Yes "yes";
 	APT::Install-Recommends "no";
+	Acquire::Languages "none";
 	quiet "yes";
 EOF
 
