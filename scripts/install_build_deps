@@ -19,6 +19,10 @@ if [ -n "$INPUT_HOST_ARCH" ]; then
 	printf 'APT::Get::Host-Architecture "%s";\n' "$INPUT_HOST_ARCH" >> "$APT_CONF_FILE"
 fi
 
+# debconf has priority “required” and is indirectly depended on by some
+# essential packages. It is reasonably safe to blindly assume it is installed.
+printf "man-db man-db/auto-update boolean false\n" | debconf-set-selections
+
 apt-get update
 
 # shellcheck disable=SC2086
