@@ -60,11 +60,8 @@ my @artifacts = sort $changes_filename, $checksums->get_files();
 if ( !-e $input_artifacts_dir ) {
     make_path( $input_artifacts_dir, { error => \my $mkdir_err } );
     if ( $mkdir_err && @{$mkdir_err} ) {
-
-        # Hopefully staying compatible with slightly older Perl (before
-        # v5.20.0) by not using postfix dereferencing below.
         die "Failed to create artifacts-dir '$input_artifacts_dir': "
-          . ( %{ @{$mkdir_err}[0] } )[1];
+          . ( $mkdir_err->[0]->%* )[1];
     }
 }
 elsif ( !-d $input_artifacts_dir ) {
