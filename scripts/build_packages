@@ -7,8 +7,12 @@ if [ -n "$INPUT_HOST_ARCH" ]; then
 	if [ -z "${CONFIG_SITE-}" ]; then
 		export CONFIG_SITE="/etc/dpkg-cross/cross-config.$INPUT_HOST_ARCH"
 	fi
-	export DEB_BUILD_OPTIONS="${DEB_BUILD_OPTIONS:+$DEB_BUILD_OPTIONS }nocheck"
-	export DEB_BUILD_PROFILES="${DEB_BUILD_PROFILES:+$DEB_BUILD_PROFILES }cross nocheck"
+	if [ -z "${DEB_BUILD_OPTIONS-}" ]; then
+		export DEB_BUILD_OPTIONS='nocheck'
+	fi
+	if [ -z "${DEB_BUILD_PROFILES-}" ]; then
+		export DEB_BUILD_PROFILES='cross nocheck'
+	fi
 	INPUT_BUILDPACKAGE_OPTS="$INPUT_BUILDPACKAGE_OPTS --host-arch=$INPUT_HOST_ARCH"
 fi
 

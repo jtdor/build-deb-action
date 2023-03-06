@@ -131,6 +131,12 @@ cross-building (cross-compilation) is automatically set up with `apt-get` and
 `dpkg-buildpackage` as described
 [in the Debian wiki](https://wiki.debian.org/CrossCompiling#Building_with_dpkg-buildpackage).
 
+To override their automatic cross-compilation setup, pass `CONFIG_SITE`,
+`DEB_BUILD_OPTIONS` or `DEB_BUILD_PROFILES` as an environment variable to the
+action with an empty or the desired value. The usual parameter(s) for
+cross-compilation, i.e., the path of a `cross-config.*` file, `nocheck` or
+`cross`, will **not** be assigned to the respective, given variable.
+
 Optional and defaults to the architecture the action is run on (likely amd64).
 
 Basic example for a cross-build:
