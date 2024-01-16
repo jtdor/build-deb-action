@@ -77,6 +77,25 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 fi
 
 start_group "Starting build container"
+
+export apt_config_dir="apt_config"
+mkdir -p $apt_config_dir
+
+if [ -n "$INPUT_APT_SOURCES" ]; then
+    echo "$INPUT_APT_SOURCES" > "$apt_config_dir/build-deb-action.sources"
+fi
+
+if [ -n "$INPUT_APT_KEY" ]; then
+    echo "$INPUT_APT_KEY" > "$apt_config_dir/build-deb-action.asc"
+fi
+
+if [ -n "$INPUT_APT_PREFERENCES" ]; then
+    echo "$INPUT_APT_PREFERENCES" > "$apt_config_dir/build-deb-action.pref"
+fi
+unset INPUT_APT_SOURCES
+unset INPUT_APT_KEY
+unset INPUT_APT_PREFERENCES
+
 # Docker does not like variable values containing newlines in an --env-file.
 env --unset=INPUT_BEFORE_BUILD_HOOK > "$env_file"
 
@@ -90,6 +109,7 @@ container_id=$(docker run \
 	--mount="type=bind,src=${GITHUB_ACTION_PATH},dst=/github/action,ro" \
 	--mount="type=bind,src=${build_dir},dst=/github/build" \
 	--mount="type=bind,src=${GITHUB_WORKSPACE},dst=/github/workspace" \
+	--mount="type=bind,src=$(pwd)/${apt_config_dir},dst=/github/${apt_config_dir}" \
 	--rm \
 	--workdir=/github/workspace \
 	-- "$INPUT_DOCKER_IMAGE" tail -f /dev/null

@@ -111,6 +111,55 @@ jobs:
           test -f debian/artifacts/test_1_i386.buildinfo
           test -f debian/artifacts/test_1_i386.changes
 
+  extra-apt-sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cat test/Makefile_extra-apt-sources >> test/Makefile
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          apt-sources: |
+            Types: deb
+            URIs: http://download.opensuse.org/repositories/shells:/fish:/release:/3/Debian_12/
+            Suites: /
+            Signed-By: /usr/share/keyrings/build-deb-action.gpg
+          apt-key: |
+            -----BEGIN PGP PUBLIC KEY BLOCK-----
+            
+            mQENBFJUIeUBCADc62ZBGiIY3OWWSs7hj4TWrHARq43mjxuwqN9XLi/bdDXLDpfZ
+            NAH+8CcgB0eSDjBuNkZcCk17nCuVru3XJp/CEpJoK0MvsJg/nGM5BaDqeXpgat36
+            llvqSvs9u3C1vgEbR9Ct+aQa73WNP6WQsDVuPDw1T5F9iMo3PhoeBYA5FCmp+Y/Z
+            6kP4HUrXZcu7PWwwRkQzvvGjodfH6j2d7oYBJvXqkaiDlKc8qrTZOSqMSqeWz6QB
+            s/y1MNszh490vatbirieEroRaNINHewjcXvBJQfoO/Nl/hDjWD7XrJWPpi34dH58
+            9IGXLS9Qb6GYnisAjwhCyhCXa4Rsse4jo1cXABEBAAG0OHNoZWxsczpmaXNoIE9C
+            UyBQcm9qZWN0IDxzaGVsbHM6ZmlzaEBidWlsZC5vcGVuc3VzZS5vcmc+iQE8BBMB
+            AgAmBQJiVuZXAhsDBQkUIXRyBgsJCAcDAgQVAggDBBYCAwECHgECF4AACgkQLOKs
+            CNiAyOTxGQf+NGWiSyXHn5kCFnqGDt5tMX/4quf+Jf1LMWC/QVPYa5xZUDwtoEyI
+            Rq70YULn4IlR/2a6dy26mwTPvHsVWmXxwYR2Lbz3YwapoFUpnvC4UM1CPvqLoVfe
+            iDrZKv1+goV6aIj89TZw7L4gxPIDa6/wV7RDmBx07HqElNJoNDo9nz5LtRxH8vco
+            7eezpy8Ruf1B2aqjaRPWu65eMNooSuy7Fb5sQEInk6PNZN6JR2rCQ5MQR+AqbRlA
+            zTGGdIbX09jpeSaSTTWrcT0qLBv5gWWhvm4stGzAe6A1t3PjtEAIQIcVF+ede9G9
+            1PG/BqCW1QJhklj4LvJ/JrXk0idjcrkZKohGBBMRAgAGBQJSVCHlAAoJEDswEbdr
+            nWUjYg4An0xyb6ofXvNifTCINq/aE4ArH1XgAKCgjoMJ2Wjo8RVSgkSOaQvK6uPq
+            eQ==
+            =HAMp
+            -----END PGP PUBLIC KEY BLOCK-----
+          apt-preferences: |
+            Package: *
+            Pin: origin download.opensuse.org
+            Pin-Priority: 900
+          buildpackage-opts: --build=binary --no-sign
+          # Install the fish shell because I really like fish (the shell).
+          extra-build-deps: fish
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   extra-build-deps:
     runs-on: ubuntu-latest
     steps:

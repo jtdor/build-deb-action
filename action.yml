@@ -5,6 +5,15 @@ inputs:
   apt-opts:
     description: Options to be passed to apt-get
     required: false
+  apt-sources:
+    description: Extra APT sources
+    required: false
+  apt-key:
+    description: Key for the extra APT sources
+    required: false
+  apt-preferences:
+    description: Preferences file for the extra APT sources
+    required: false
   artifacts-dir:
     default: debian/artifacts
     description: Directory path relative to $GITHUB_WORKSPACE to place the built packages in
@@ -40,6 +49,9 @@ runs:
         # Manually setting INPUT_* variables here until
         # https://github.com/actions/runner/issues/665 is resolved:
         INPUT_APT_OPTS: ${{ inputs.apt-opts }}
+        INPUT_APT_SOURCES: ${{  inputs.apt-sources }}
+        INPUT_APT_KEY: ${{  inputs.apt-key }}
+        INPUT_APT_PREFERENCES: ${{  inputs.apt-preferences }}
         INPUT_ARTIFACTS_DIR: ${{ inputs.artifacts-dir }}
         INPUT_BEFORE_BUILD_HOOK: ${{ inputs.before-build-hook }}
         INPUT_BUILDPACKAGE_OPTS: ${{ inputs.buildpackage-opts }}

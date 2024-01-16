@@ -24,7 +24,28 @@ fi
 # essential packages. It is reasonably safe to blindly assume it is installed.
 printf "man-db man-db/auto-update boolean false\n" | debconf-set-selections
 
+#!/bin/bash
+
+# shellcheck disable=SC2154
+if [ -f "/github/$apt_config_dir/build-deb-action.asc" ]; then
+    apt-get update
+	# ca-certificates are needed otherwise most third-party repos are going to failed the verification
+	# issuing errors such as 404 and "Certificate verification failed: The certificate is NOT trusted"
+	# or similar.
+    apt-get install gpg ca-certificates
+    gpg --dearmor -o /usr/share/keyrings/build-deb-action.gpg /github/"$apt_config_dir"/build-deb-action.asc
+fi
+
+if [ -f "/github/$apt_config_dir/build-deb-action.sources" ]; then
+    cp /github/"$apt_config_dir"/build-deb-action.sources /etc/apt/sources.list.d/build-deb-action.sources
+fi
+
+if [ -f "/github/$apt_config_dir/build-deb-action.pref" ]; then
+    cp /github/"$apt_config_dir"/build-deb-action.pref /etc/apt/preferences.d/build-deb-action.pref
+fi
+
 apt-get update
+apt-cache policy
 
 # shellcheck disable=SC2086
 apt-get build-dep $INPUT_APT_OPTS -- "./$INPUT_SOURCE_DIR"
