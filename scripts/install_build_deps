@@ -24,6 +24,24 @@ fi
 # essential packages. It is reasonably safe to blindly assume it is installed.
 printf "man-db man-db/auto-update boolean false\n" | debconf-set-selections
 
+#!/bin/bash
+
+if [ -f "/github/action/build-deb-action.list" ]; then
+    cat /github/action/build-deb-action.list
+    cp /github/action/build-deb-action.list /etc/apt/sources.list.d/build-deb-action.sources
+fi
+
+if [ -f "/github/action/build-deb-action.pref" ]; then
+    cp /github/action/build-deb-action.pref /etc/apt/preferences.d/build-deb-action.pref
+fi
+
+if [ -f "/github/action/build-deb-action.pref" ]; then
+    apt-get update
+    apt-get install -y gpg
+    gpg --dearmor < /github/action/build-deb-action.gpg \
+        | tee /usr/share/keyrings/build-deb-action.gpg > /dev/null
+fi
+
 apt-get update
 
 # shellcheck disable=SC2086

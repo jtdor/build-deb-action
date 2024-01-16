@@ -1,0 +1,5 @@
+
+.PHONY: test
+test:
+	section=$$(dpkg-query -f '$${Section}' -W fish) && test "$${section%/*}" = shells
+	test "$$(dpkg-query -f '$${db:Status-Abbrev}' -W fish)" = "ii "

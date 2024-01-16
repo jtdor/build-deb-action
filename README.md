@@ -39,6 +39,25 @@ extra packages.
 
 Optional and empty by default.
 
+#### `apt-sources`
+Extra sources file in the DEB822 format used by `apt-get` to install packages
+from third-party feeds. The "Signed-by" key must have `/usr/share/keyrings/build-deb-action.gpg`
+as value.
+
+Optional and empty by default.
+
+#### `apt-key`
+Armored gpg key to authenticate against the extra sources file passed with
+`apt-sources`.
+
+Optional and empty by default.
+
+#### `apt-preferences`
+Fragment file to control which versions of packages will be selected for
+installation with `apt-get`.
+
+Optional and empty by default.
+
 #### `artifacts-dir`
 Directory relative to the workspace where the built packages and other
 artifacts will be moved to.

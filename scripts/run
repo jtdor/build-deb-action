@@ -77,6 +77,14 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 fi
 
 start_group "Starting build container"
+
+echo "$INPUT_APT_SOURCES" > build-deb-action.sources
+echo "$INPUT_APT_KEY" > build-deb-action.gpg
+echo "$INPUT_APT_PREFERENCES" > build-deb-action.pref
+unset INPUT_APT_SOURCES
+unset INPUT_APT_KEY
+unset INPUT_APT_PREFERENCES
+
 # Docker does not like variable values containing newlines in an --env-file.
 env --unset=INPUT_BEFORE_BUILD_HOOK > "$env_file"
 
