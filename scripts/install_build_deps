@@ -44,6 +44,32 @@ if [ -f "/github/$apt_config_dir/build-deb-action.pref" ]; then
     cp /github/"$apt_config_dir"/build-deb-action.pref /etc/apt/preferences.d/build-deb-action.pref
 fi
 
+# amd64 ubuntu image come, for some reason, with archives.ubuntu.com as
+# package feeds instead of ports.ubuntu.com. This is bad because archives
+# only has x86 and amd64 packages, so we can't cross-build with an ubuntu
+# container. The workaround is adding ports manually here.
+# shellcheck disable=SC1091
+. /etc/os-release
+
+if [ "$ID" = "ubuntu" ] && [ -n "$INPUT_HOST_ARCH" ]; then
+	# completly rebuild the sources.list files from scratch, specifying the arch
+	rm -rf /etc/apt/sources.list
+    echo "deb [arch=$INPUT_HOST_ARCH] http://ports.ubuntu.com/ubuntu-ports/ ${VERSION_CODENAME} main restricted universe" | tee "/etc/apt/sources.list.d/$INPUT_HOST_ARCH.list"
+    echo "deb [arch=$INPUT_HOST_ARCH] http://ports.ubuntu.com/ubuntu-ports/ ${VERSION_CODENAME}-updates main restricted universe" | tee -a "/etc/apt/sources.list.d/$INPUT_HOST_ARCH.list"
+    echo "deb [arch=$INPUT_HOST_ARCH] http://ports.ubuntu.com/ubuntu-ports/ ${VERSION_CODENAME}-backports main restricted universe" | tee -a "/etc/apt/sources.list.d/$INPUT_HOST_ARCH.list"
+    echo "deb [arch=$INPUT_HOST_ARCH] http://ports.ubuntu.com/ubuntu-ports/ ${VERSION_CODENAME}-security main restricted universe" | tee -a "/etc/apt/sources.list.d/$INPUT_HOST_ARCH.list"
+
+	echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ ${VERSION_CODENAME} universe" | tee "/etc/apt/sources.list.d/archive.list"
+	echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ ${VERSION_CODENAME}-updates universe" | tee "/etc/apt/sources.list.d/archive.list"
+	echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ ${VERSION_CODENAME} multiverse" | tee "/etc/apt/sources.list.d/archive.list"
+	echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ ${VERSION_CODENAME}-updates multiverse" | tee "/etc/apt/sources.list.d/archive.list"
+	echo "deb [arch=amd64,i386] http://archive.ubuntu.com/ubuntu/ ${VERSION_CODENAME}-backports main restricted universe multiverse" | tee "/etc/apt/sources.list.d/archive.list"
+	echo "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu/ ${VERSION_CODENAME}-security main restricted" | tee "/etc/apt/sources.list.d/archive.list"
+	echo "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu/ ${VERSION_CODENAME}-security universe" | tee "/etc/apt/sources.list.d/archive.list"
+	echo "deb [arch=amd64,i386] http://security.ubuntu.com/ubuntu/ ${VERSION_CODENAME}-security multiverse" | tee "/etc/apt/sources.list.d/archive.list"
+ 
+fi
+
 apt-get update
 apt-cache policy
 

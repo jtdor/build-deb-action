@@ -111,6 +111,24 @@ jobs:
           test -f debian/artifacts/test_1_i386.buildinfo
           test -f debian/artifacts/test_1_i386.changes
 
+  different-host-arch-with-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          host-arch: arm64
+          docker-image: ubuntu:22.04
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_arm64.deb
+          dpkg --contents debian/artifacts/test_1_arm64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_arm64.buildinfo
+          test -f debian/artifacts/test_1_arm64.changes
+
   extra-apt-sources:
     runs-on: ubuntu-latest
     steps:
