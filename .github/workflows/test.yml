@@ -237,14 +237,13 @@ jobs:
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
         with:
-          artifacts-dir: .
           buildpackage-opts: --build=binary --no-sign
           source-dir: test
       - run: |
-          dpkg --info test_4.3.2-1+final~42-5.deb+long~version_amd64.deb
-          dpkg --contents test_4.3.2-1+final~42-5.deb+long~version_amd64.deb | grep ./usr/bin/mybin
-          test -f test_4.3.2-1+final~42-5.deb+long~version_amd64.buildinfo
-          test -f test_4.3.2-1+final~42-5.deb+long~version_amd64.changes
+          dpkg --info debian/artifacts/test_4.3.2-1+final~42-5.deb+long~version_amd64.deb
+          dpkg --contents debian/artifacts/test_4.3.2-1+final~42-5.deb+long~version_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_4.3.2-1+final~42-5.deb+long~version_amd64.buildinfo
+          test -f debian/artifacts/test_4.3.2-1+final~42-5.deb+long~version_amd64.changes
 
   not-moving-artifacts:
     runs-on: ubuntu-latest
