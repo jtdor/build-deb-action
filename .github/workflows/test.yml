@@ -9,7 +9,7 @@ jobs:
   apt-opts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -26,7 +26,7 @@ jobs:
   before-build-hook:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -47,7 +47,7 @@ jobs:
   default-source-dir:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: cp -r test/* .
       - uses: ./
         env:
@@ -63,7 +63,7 @@ jobs:
   different-artifacts-dir:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -80,7 +80,7 @@ jobs:
   different-docker-image:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -97,7 +97,7 @@ jobs:
   different-host-arch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -114,7 +114,7 @@ jobs:
   extra-build-deps:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: cat test/Makefile_extra-build-deps >> test/Makefile
       - uses: ./
         env:
@@ -133,7 +133,7 @@ jobs:
   extra-docker-args:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: cat test/Makefile_extra-docker-args >> test/Makefile
       - uses: ./
         env:
@@ -151,7 +151,7 @@ jobs:
   full-build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -169,7 +169,7 @@ jobs:
   git-as-root-in-hook:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -193,7 +193,7 @@ jobs:
   local-dockerfile:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: cat test/Makefile_local-dockerfile >> test/Makefile
       - uses: ./
         env:
@@ -211,7 +211,7 @@ jobs:
   multiple-packages:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           buildpackage-opts: --build=binary --no-sign
@@ -229,7 +229,7 @@ jobs:
   non-trivial-package-version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - run: |
           sed -i '1 s/\(1\)/4.3.2-1+final~42-5.deb+long~version/' test/debian/changelog
           sed -i 's/native/quilt/' test/debian/source/format
@@ -249,7 +249,7 @@ jobs:
   not-moving-artifacts:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -266,7 +266,7 @@ jobs:
   single-package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         env:
           DEB_BUILD_OPTIONS: noautodbgsym
@@ -283,7 +283,7 @@ jobs:
   source-package:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           buildpackage-opts: --build=source --no-sign
