@@ -7,6 +7,7 @@ on:
 
 jobs:
   apt-opts:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +25,7 @@ jobs:
           test -f debian/artifacts/test_1_amd64.changes
 
   before-build-hook:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,6 +47,7 @@ jobs:
           test -f debian/artifacts/test_2_amd64.changes
 
   default-source-dir:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -61,6 +64,7 @@ jobs:
           test -f debian/artifacts/test_1_amd64.changes
 
   different-artifacts-dir:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -78,6 +82,7 @@ jobs:
           test -f my_artifacts/test_1_amd64.changes
 
   different-docker-image:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -95,6 +100,7 @@ jobs:
           test -f debian/artifacts/test_1_amd64.changes
 
   different-host-arch:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -112,6 +118,7 @@ jobs:
           test -f debian/artifacts/test_1_i386.changes
 
   extra-build-deps:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -131,6 +138,7 @@ jobs:
           test -f debian/artifacts/test_1_amd64.changes
 
   extra-docker-args:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -167,6 +175,7 @@ jobs:
           test -f debian/artifacts/test_1_amd64.changes
 
   git-as-root-in-hook:
+    needs: [before-build-hook]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -191,6 +200,7 @@ jobs:
           test -f debian/artifacts/test_1+${{ github.sha }}_amd64.changes
 
   local-dockerfile:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -227,6 +237,7 @@ jobs:
   # Regression test following issue #3 (“Did not find the .buildinfo file in
   # debian/files”)
   non-trivial-package-version:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -246,6 +257,7 @@ jobs:
           test -f debian/artifacts/test_4.3.2-1+final~42-5.deb+long~version_amd64.changes
 
   not-moving-artifacts:
+    needs: [single-package]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
