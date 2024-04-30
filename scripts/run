@@ -29,9 +29,9 @@ check_path_prefix()
 {
 	real_prefix=$(realpath "$2")
 	case "$(realpath --canonicalize-missing -- "$1")" in
-		"$real_prefix"|"$real_prefix/"*)
-			return 0
-			;;
+	"$real_prefix" | "$real_prefix/"*)
+		return 0
+		;;
 	esac
 
 	return 1
@@ -72,27 +72,30 @@ if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 		--file="$INPUT_DOCKER_IMAGE" \
 		--iidfile="$image_id_file" \
 		-- "$GITHUB_WORKSPACE/$(dirname -- "$INPUT_DOCKER_IMAGE")"
-	read -r INPUT_DOCKER_IMAGE < "$image_id_file" || :
+	read -r INPUT_DOCKER_IMAGE <"$image_id_file" || :
 	end_group
 fi
 
 start_group "Starting build container"
 # Docker does not like variable values containing newlines in an --env-file.
-env --unset=INPUT_BEFORE_BUILD_HOOK > "$env_file"
+env --unset=INPUT_BEFORE_BUILD_HOOK >"$env_file"
 
 # shellcheck disable=SC2086
-container_id=$(docker run \
-	$INPUT_EXTRA_DOCKER_ARGS \
-	--detach \
-	--env-file="$env_file" \
-	--env=GITHUB_ACTION_PATH=/github/action \
-	--env=GITHUB_WORKSPACE=/github/workspace \
-	--mount="type=bind,src=${GITHUB_ACTION_PATH},dst=/github/action,ro" \
-	--mount="type=bind,src=${build_dir},dst=/github/build" \
-	--mount="type=bind,src=${GITHUB_WORKSPACE},dst=/github/workspace" \
-	--rm \
-	--workdir=/github/workspace \
-	-- "$INPUT_DOCKER_IMAGE" tail -f /dev/null
+container_id=$(
+	docker run \
+		$INPUT_EXTRA_DOCKER_ARGS \
+		--detach \
+		--env-file="$env_file" \
+		--env=GITHUB_ACTION_PATH=/github/action \
+		--env=GITHUB_WORKSPACE=/github/workspace \
+		--mount="type=bind,src=${GITHUB_ACTION_PATH},dst=/github/action,ro" \
+		--mount="type=bind,src=${build_dir},dst=/github/build" \
+		--mount="type=bind,src=${GITHUB_WORKSPACE},dst=/github/workspace" \
+		--rm \
+		--workdir=/github/workspace \
+		-- \
+		"$INPUT_DOCKER_IMAGE" \
+		tail -f /dev/null
 )
 end_group
 
