@@ -18,7 +18,7 @@ inputs:
     required: false
   docker-image:
     default: debian:stable-slim
-    description: Name of a Docker image to build inside or path of a Dockerfile
+    description: Name of a Docker image or path of a Dockerfile to use for the build container
     required: true
   extra-build-deps:
     description: Extra packages to be installed as build dependencies
