@@ -52,9 +52,10 @@ given, same as for a
 [`run` step](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun)
 in a workflow.
 
-The hook is executed with `sh -c` as the root user *inside* the build container.
-The package contents from the build dependencies and
-[`extra-build-deps`](#extra-build-deps) are available.
+The hook is executed with `sh -c` as the root user *inside* the build
+container. The working directory is the workspace. The package contents from
+the build dependencies and [`extra-build-deps`](#extra-build-deps) are
+available.
 
 Optional and empty by default.
 
