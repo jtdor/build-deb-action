@@ -29,6 +29,10 @@ inputs:
   host-arch:
     description: Foreign architecture to setup cross-compilation for
     required: false
+  setup-hook:
+    description: Shell command(s) to execute after setting-up the build
+      environment and before installing build dependencies
+    required: false
   source-dir:
     default: ./
     description: Path relative to $GITHUB_WORKSPACE that contains the package sources
@@ -47,6 +51,7 @@ runs:
         INPUT_EXTRA_BUILD_DEPS: ${{ inputs.extra-build-deps }}
         INPUT_EXTRA_DOCKER_ARGS: ${{ inputs.extra-docker-args }}
         INPUT_HOST_ARCH: ${{ inputs.host-arch }}
+        INPUT_SETUP_HOOK: ${{ inputs.setup-hook }}
         INPUT_SOURCE_DIR: ${{ inputs.source-dir }}
       run: ${{ github.action_path }}/scripts/run
       shell: bash

@@ -78,7 +78,10 @@ fi
 
 start_group "Starting build container"
 # Docker does not like variable values containing newlines in an --env-file.
-env --unset=INPUT_BEFORE_BUILD_HOOK >"$env_file"
+env \
+	--unset=INPUT_BEFORE_BUILD_HOOK \
+	--unset=INPUT_SETUP_HOOK \
+	>"$env_file"
 
 # shellcheck disable=SC2086
 container_id=$(
@@ -114,6 +117,12 @@ docker exec "$container_id" install \
 	/github/build/gitconfig \
 	/etc/gitconfig
 end_group
+
+if [ -n "$INPUT_SETUP_HOOK" ]; then
+	start_group "Executing setup hook"
+	docker exec "$container_id" /bin/sh -c "$INPUT_SETUP_HOOK"
+	end_group
+fi
 
 start_group "Installing build dependencies"
 docker exec "$container_id" /github/action/scripts/install_build_deps

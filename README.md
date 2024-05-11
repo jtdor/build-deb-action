@@ -108,6 +108,18 @@ Basic example for cross-compilation:
     host-arch: i386
 ```
 
+#### `setup-hook`
+Shell command(s) to be executed after setting-up the build environment and
+right before installing the build dependencies. A single or multiple commands
+can be given, same as for a
+[`run` step](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun)
+in a workflow.
+
+The hook is executed with `sh -c` as the root user *inside* the build
+container. The working directory is the workspace.
+
+Optional and empty by default.
+
 #### `source-dir`
 Directory relative to the workspace that contains the package sources,
 especially the `debian/` subdirectory.

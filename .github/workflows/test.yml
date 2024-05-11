@@ -274,6 +274,30 @@ jobs:
           test -f test_1_amd64.buildinfo
           test -f test_1_amd64.changes
 
+  setup-hook:
+    needs: [single-package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cat test/Makefile_setup-hook >>test/Makefile
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          setup-hook: |
+            cat <<EOF >/etc/apt/preferences
+            Package: *
+            Pin: release o=Debian
+            Pin-Priority: 666
+            EOF
+          buildpackage-opts: --build=binary --no-sign
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   single-package:
     runs-on: ubuntu-latest
     steps:
