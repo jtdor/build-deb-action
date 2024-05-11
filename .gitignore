@@ -1,1 +1,9 @@
 *.swp
+test-dbgsym_1_amd64.deb
+test_1.dsc
+test_1.tar.*
+test_1_amd64-*.build
+test_1_amd64.build
+test_1_amd64.buildinfo
+test_1_amd64.changes
+test_1_amd64.deb
