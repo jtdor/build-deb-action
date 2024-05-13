@@ -30,8 +30,8 @@ jobs:
           buildpackage-opts: --build=binary --no-sign
 ```
 
-### Inputs
-All inputs have a default value or are optional.
+### Input Parameters
+All input parameters have a default value or are optional.
 
 #### `apt-opts`
 Extra options to be passed to `apt-get` when installing build dependencies and
