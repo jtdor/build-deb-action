@@ -2,7 +2,7 @@
 
 set -eu
 
-# Adapted from pbuilder's support for cross-compilation:
+# Adapted from pbuilder's and sbuild's support for cross-compilation:
 if [ -n "$INPUT_HOST_ARCH" ]; then
 	if [ -z "${CONFIG_SITE-}" ]; then
 		export CONFIG_SITE="/etc/dpkg-cross/cross-config.$INPUT_HOST_ARCH"
