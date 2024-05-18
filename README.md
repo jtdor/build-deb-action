@@ -116,13 +116,13 @@ Optional and empty by default.
 
 #### `host-arch`
 The architecture packages are built for. If this parameter is set,
-cross-compilation is automatically set up with `apt-get` and
+cross-building (cross-compilation) is automatically set up with `apt-get` and
 `dpkg-buildpackage` as described
 [in the Debian wiki](https://wiki.debian.org/CrossCompiling#Building_with_dpkg-buildpackage).
 
 Optional and defaults to the architecture the action is run on (likely amd64).
 
-Basic example for cross-compilation:
+Basic example for a cross-build:
 ```yaml
 - uses: jtdor/build-deb-action@v1
   with:

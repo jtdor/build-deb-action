@@ -33,7 +33,7 @@ inputs:
     description: Extra APT repositories to configure in the build environment (one-line-style or deb822-style format)
     required: false
   host-arch:
-    description: Foreign architecture to setup cross-compilation for
+    description: Foreign architecture to setup cross-building for
     required: false
   setup-hook:
     description: Shell command(s) to execute after setting-up the build
