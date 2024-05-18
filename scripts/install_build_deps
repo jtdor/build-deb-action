@@ -13,7 +13,7 @@ cat >"$APT_CONF_FILE" <<-EOF
 	quiet "yes";
 EOF
 
-# Adapted from pbuilder's support for cross-building:
+# Adapted from pbuilder's and sbuild's support for cross-building:
 if [ -n "$INPUT_HOST_ARCH" ]; then
 	dpkg --add-architecture "$INPUT_HOST_ARCH"
 	INPUT_EXTRA_BUILD_DEPS="$INPUT_EXTRA_BUILD_DEPS crossbuild-essential-$INPUT_HOST_ARCH libc-dev:$INPUT_HOST_ARCH"
