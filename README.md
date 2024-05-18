@@ -116,7 +116,8 @@ Optional and empty by default.
 
 #### `host-arch`
 The architecture packages are built for. If this parameter is set,
-cross-compilation is set up with `apt-get` and `dpkg-buildpackage` as described
+cross-compilation is automatically set up with `apt-get` and
+`dpkg-buildpackage` as described
 [in the Debian wiki](https://wiki.debian.org/CrossCompiling#Building_with_dpkg-buildpackage).
 
 Optional and defaults to the architecture the action is run on (likely amd64).
