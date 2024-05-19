@@ -13,6 +13,17 @@ In some aspects, this action is comparable to `pbuilder` and `sbuild`. It uses
 Docker containers instead of chroots, though, to set up the clean, predefined
 build environment.
 
+> [!IMPORTANT]
+> This action is
+> [intended](https://github.com/jtdor/build-deb-action/discussions/5#discussioncomment-5512205)
+> to be used with repositories that are prepared to be packaged in the standard
+> Debian way. This means repositories must provide a `debian/` subdirectory
+> that contains information and rules about the package(s) to be built.
+>
+> If you are looking for an action that packages an arbitrary repository, you
+> might prefer looking for a different action on the
+> [GitHub Marketplace](https://github.com/marketplace?type=actions).
+
 ## Usage
 ### Basic Example
 ```yaml
