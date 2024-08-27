@@ -281,6 +281,31 @@ jobs:
           test -f debian/artifacts/test_1_amd64.buildinfo
           test -f debian/artifacts/test_1_amd64.changes
 
+  extra-apt-preferences:
+    needs: [setup-hook]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cat test/Makefile_extra-preferences >>test/Makefile
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          extra-apt-preferences: |
+            Package: *
+            Pin: origin deb.debian.org
+            Pin-Priority: 900
+          setup-hook: |
+            apt-get update # Called here manually only for testing purposes!
+            ! apt-cache policy | grep -B3 'origin deb.debian.org' | grep -q '900'
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   full-build:
     runs-on: ubuntu-latest
     steps:
