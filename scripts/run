@@ -149,6 +149,11 @@ in_container()
 {
 	docker exec "$container_id" "$@"
 }
+
+if ! in_container /github/action/scripts/probe_env; then
+	error "docker-image is not a Debian-based Docker image/Dockerfile"
+	exit 2
+fi
 end_group
 
 start_group "Setting up build container"

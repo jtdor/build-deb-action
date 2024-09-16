@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -eu
+
+test -f /etc/debian_version
+command -v apt-get >/dev/null
+command -v dpkg >/dev/null
