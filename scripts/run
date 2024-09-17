@@ -39,7 +39,15 @@ check_path_prefix()
 
 clean_up()
 {
-	rm --force --recursive -- "${build_dir-}"
+	if [ "${container_id-}" ]; then
+		docker stop --time=1 "$container_id" >/dev/null
+		unset container_id
+	fi
+
+	if [ "${build_dir-}" ]; then
+		rm --force --recursive -- "$build_dir"
+		unset build_dir
+	fi
 }
 
 build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX) || exit 1
@@ -185,6 +193,7 @@ start_group "Moving artifacts"
 docker exec "$container_id" /github/action/scripts/move_artifacts
 end_group
 
-start_group "Stopping build container"
-docker stop --time=1 "$container_id" >/dev/null
+start_group "Cleaning up"
+clean_up
+trap - EXIT
 end_group
