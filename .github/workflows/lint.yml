@@ -3,7 +3,9 @@ name: Linting
 on:
   pull_request:
   push:
-    paths-ignore: [LICENSE, README.md]
+    paths:
+      - .github/workflows/lint.yml
+      - scripts/**
 
 jobs:
   executable-scripts:
