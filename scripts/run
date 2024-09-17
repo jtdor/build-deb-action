@@ -144,11 +144,16 @@ container_id=$(
 		"$INPUT_DOCKER_IMAGE" \
 		tail -f /dev/null
 )
+
+in_container()
+{
+	docker exec "$container_id" "$@"
+}
 end_group
 
 start_group "Setting up build container"
 while read -r extra_repo_key_file; do
-	docker exec "$container_id" install \
+	in_container install \
 		--mode=644 \
 		--target-directory=/etc/apt/trusted.gpg.d \
 		"$extra_repo_key_file"
@@ -162,7 +167,7 @@ done <"$extra_repo_key_files_file"
 # repository belongs to a different user.
 git config --file="$gitconfig_file" safe.directory '*'
 
-docker exec "$container_id" install \
+in_container install \
 	--mode=644 \
 	--no-target-directory \
 	/github/build/gitconfig \
@@ -171,26 +176,26 @@ end_group
 
 if [ -n "$INPUT_SETUP_HOOK" ]; then
 	start_group "Executing setup hook"
-	docker exec "$container_id" /bin/sh -c "$INPUT_SETUP_HOOK"
+	in_container /bin/sh -c "$INPUT_SETUP_HOOK"
 	end_group
 fi
 
 start_group "Installing build dependencies"
-docker exec "$container_id" /github/action/scripts/install_build_deps
+in_container /github/action/scripts/install_build_deps
 end_group
 
 if [ -n "$INPUT_BEFORE_BUILD_HOOK" ]; then
 	start_group "Executing before-build hook"
-	docker exec "$container_id" /bin/sh -c "$INPUT_BEFORE_BUILD_HOOK"
+	in_container /bin/sh -c "$INPUT_BEFORE_BUILD_HOOK"
 	end_group
 fi
 
 start_group "Building package"
-docker exec "$container_id" /github/action/scripts/build_packages
+in_container /github/action/scripts/build_packages
 end_group
 
 start_group "Moving artifacts"
-docker exec "$container_id" /github/action/scripts/move_artifacts
+in_container /github/action/scripts/move_artifacts
 end_group
 
 start_group "Cleaning up"
