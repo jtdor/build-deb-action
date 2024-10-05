@@ -57,10 +57,9 @@ clean_up()
 		unset build_dir
 	fi
 }
-
-build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX) || exit 1
 trap clean_up EXIT INT HUP TERM
 
+build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX)
 env_file=$build_dir/env
 extra_repo_keys_file=$build_dir/build-deb-action.asc
 extra_repo_key_files_file=$build_dir/extra_repo_key_files
