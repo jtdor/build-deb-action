@@ -3,6 +3,14 @@
 set -eu
 
 # Usage:
+#   die EXIT_STATUS MESSAGE
+die()
+{
+	error "$2"
+	exit "$1"
+}
+
+# Usage:
 #   error MESSAGE
 error()
 {
@@ -60,14 +68,12 @@ gitconfig_file=$build_dir/gitconfig
 
 INPUT_ARTIFACTS_DIR=${INPUT_ARTIFACTS_DIR:-.}
 if ! check_path_prefix "$INPUT_ARTIFACTS_DIR" "$GITHUB_WORKSPACE"; then
-	error "artifacts-dir is not in GITHUB_WORKSPACE"
-	exit 2
+	die 2 "artifacts-dir is not in GITHUB_WORKSPACE"
 fi
 
 INPUT_SOURCE_DIR=${INPUT_SOURCE_DIR:-.}
 if ! check_path_prefix "$INPUT_SOURCE_DIR" "$GITHUB_WORKSPACE"; then
-	error "source-dir is not in GITHUB_WORKSPACE"
-	exit 2
+	die 2 "source-dir is not in GITHUB_WORKSPACE"
 fi
 
 touch "$extra_repo_key_files_file"
@@ -79,8 +85,7 @@ if [ "$INPUT_EXTRA_REPO_KEYS" ]; then
 
 		if [ ! -f "$extra_repo_key_file" ]; then
 			if [ -s "$extra_repo_key_files_file" ]; then
-				error "extra-repo-keys cannot contain both ASCII-armored keys and key file paths"
-				exit 2
+				die 2 "extra-repo-keys cannot contain both ASCII-armored keys and key file paths"
 			fi
 
 			# Looks like (an) ASCII-armored key(s)
@@ -88,8 +93,7 @@ if [ "$INPUT_EXTRA_REPO_KEYS" ]; then
 		fi
 
 		if ! check_path_prefix "$extra_repo_key_file" "$GITHUB_WORKSPACE"; then
-			error "A path to a key file in extra-repo-keys is not in GITHUB_WORKSPACE"
-			exit 2
+			die 2 "A path to a key file in extra-repo-keys is not in GITHUB_WORKSPACE"
 		fi
 
 		printf '%s\n' "$extra_repo_key_file" >>"$extra_repo_key_files_file"
@@ -102,8 +106,7 @@ fi
 
 if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 	if ! check_path_prefix "$INPUT_DOCKER_IMAGE" "$GITHUB_WORKSPACE"; then
-		error "docker-image is the path of a Dockerfile but it is not in GITHUB_WORKSPACE"
-		exit 2
+		die 2 "docker-image is the path of a Dockerfile but it is not in GITHUB_WORKSPACE"
 	fi
 
 	start_group "Building container image"
@@ -151,8 +154,7 @@ in_container()
 }
 
 if ! in_container /github/action/scripts/probe_env; then
-	error "docker-image is not a Debian-based Docker image/Dockerfile"
-	exit 2
+	die 2 "docker-image is not a Debian-based Docker image/Dockerfile"
 fi
 end_group
 
