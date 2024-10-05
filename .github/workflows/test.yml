@@ -3,7 +3,10 @@ name: Testing
 on:
   pull_request:
   push:
-    paths-ignore: [LICENSE, README.md]
+    paths-ignore:
+      - .github/workflows/lint.yml
+      - LICENSE
+      - README.md
 
 jobs:
   apt-opts:
