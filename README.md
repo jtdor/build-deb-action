@@ -115,6 +115,16 @@ deb822 style, see
 
 Optional and empty by default.
 
+#### `extra-apt-preferences`
+Extra APT preferences to configure package priorities in the build environment.
+
+This allows you to pin packages from specific sources or set priorities to control
+package selection during installation or upgrades. The preferences should be
+provided in a format supported by APT, typically as entries in Package, Pin, and
+Pin-Priority fields. For more details, see `man apt_preferences`.
+
+Optional and empty by default.
+
 #### `extra-repo-keys`
 Extra keys for APT to trust in the build environment. Useful in combination
 with [`extra-repos`](#extra-repos).
