@@ -421,6 +421,28 @@ jobs:
           test -f test_1_amd64.buildinfo
           test -f test_1_amd64.changes
 
+  outputs-artifacts:
+    needs: [single-package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        id: build
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          source-dir: test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+          printf "${{ steps.build.outputs.artifacts }}" | grep -x debian/artifacts/test_1_amd64.buildinfo
+          printf "${{ steps.build.outputs.artifacts }}" | grep -x debian/artifacts/test_1_amd64.changes
+          printf "${{ steps.build.outputs.artifacts }}" | grep -x debian/artifacts/test_1_amd64.deb
+          test "$(printf '%s\n' "${{ steps.build.outputs.artifacts }}" | wc -l)" -eq 3
+
   probe-env:
     runs-on: ubuntu-latest
     steps:

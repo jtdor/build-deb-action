@@ -43,6 +43,11 @@ inputs:
     default: ./
     description: Path relative to $GITHUB_WORKSPACE that contains the package sources
     required: true
+outputs:
+  artifacts:
+    description: Newline-separated list of artifacts (the .buildinfo, .changes
+      and .deb files); the list contains their paths relative to the workspace
+    value: ${{ steps.run.outputs.ARTIFACTS }}
 runs:
   using: composite
   steps:

@@ -18,6 +18,7 @@ use File::Spec;
 
 my $input_artifacts_dir = $ENV{INPUT_ARTIFACTS_DIR};
 my $input_source_dir    = $ENV{INPUT_SOURCE_DIR};
+my $output_artifacts    = $ENV{OUTPUT_ARTIFACTS};
 my $artifacts_src_dir   = File::Spec->catfile( $input_source_dir, q{..} );
 my $changes_filename;
 my $rc = 0;
@@ -68,23 +69,30 @@ elsif ( !-d $input_artifacts_dir ) {
     die "artifacts-dir '$input_artifacts_dir' exists but is not a directory";
 }
 
-if ( abs_path($artifacts_src_dir) ne abs_path($input_artifacts_dir) ) {
-    for my $artifact (@artifacts) {
-        my $artifact_file =
-          File::Spec->catfile( $artifacts_src_dir, $artifact );
-        if ( move( $artifact_file, $input_artifacts_dir ) ) {
+open my $artifacts_fh, '>', $output_artifacts
+  or die "Failed to open outputs/ARTIFACTS: $!";
+
+for my $artifact (@artifacts) {
+    my $artifact_src  = File::Spec->catfile( $artifacts_src_dir,   $artifact );
+    my $artifact_dest = File::Spec->catfile( $input_artifacts_dir, $artifact );
+
+    if ( abs_path($artifact_src) ne abs_path($artifact_dest) ) {
+        if ( move( $artifact_src, $artifact_dest ) ) {
             say "Moved '$artifact'";
         }
         else {
             warn "Failed to move '$artifact': $!";
             $rc = 1;
+            next;
         }
     }
-}
-else {
-    for (@artifacts) {
-        say "Not moving '$_', already in the right directory";
+    else {
+        say "Not moving '$artifact', already in the right directory";
     }
+
+    say $artifacts_fh $artifact_dest;
 }
+
+close $artifacts_fh or warn 'Failed to close outputs/ARTIFACTS';
 
 exit $rc;

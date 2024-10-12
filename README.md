@@ -167,6 +167,23 @@ Environment variables work as you would expect. So you can use e.g. the
     DEB_BUILD_OPTIONS: noautodbgsym
 ```
 
+### Output Parameters
+
+#### `artifacts`
+Newline-separated list of artifacts (the `.buildinfo`, `.changes` and `.deb`
+files) that were moved to the [`artifacts-dir`](#artifacts-dir).
+
+The list contains their paths relative to the workspace.
+
+Example content:
+
+```
+debian/artifacts/foobar_1_amd64.buildinfo
+debian/artifacts/foobar_1_amd64.changes
+debian/artifacts/foobar_1_amd64.deb
+debian/artifacts/foobar-dbgsym_1_amd64.deb
+```
+
 ## Motivation
 There are other GitHub actions that wrap `dpkg-buildpackage`. At the time of
 writing, all of them had one or multiple limitations:

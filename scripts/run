@@ -48,6 +48,8 @@ if ! check_path_prefix "$INPUT_SOURCE_DIR" "$GITHUB_WORKSPACE"; then
 	die 2 "source-dir is not in GITHUB_WORKSPACE"
 fi
 
+create_output "$outputs_dir" ARTIFACTS
+
 touch "$extra_repo_key_files_file"
 if [ "$INPUT_EXTRA_REPO_KEYS" ]; then
 	printf '%s\n' "$INPUT_EXTRA_REPO_KEYS" >"$extra_repo_keys_file"
