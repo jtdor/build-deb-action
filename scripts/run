@@ -19,6 +19,15 @@ check_path_prefix()
 	return 1
 }
 
+# Usage:
+#   create_output OUTPUTS_DIR OUTPUT_NAME
+create_output()
+{
+	mkdir -p -- "$1"
+	touch -- "${1%/}/${2}"
+	export -- "OUTPUT_${2}=/github/build/outputs/${2}"
+}
+
 start_group "Preparing"
 build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX)
 printf 'build-dir=%s\n' "$build_dir" >>"$GITHUB_OUTPUT"
@@ -27,6 +36,7 @@ env_file=$build_dir/env
 extra_repo_keys_file=$build_dir/build-deb-action.asc
 extra_repo_key_files_file=$build_dir/extra_repo_key_files
 gitconfig_file=$build_dir/gitconfig
+outputs_dir=${build_dir}/outputs
 
 INPUT_ARTIFACTS_DIR=${INPUT_ARTIFACTS_DIR:-.}
 if ! check_path_prefix "$INPUT_ARTIFACTS_DIR" "$GITHUB_WORKSPACE"; then
@@ -168,4 +178,14 @@ end_group
 
 start_group "Moving artifacts"
 in_container /github/action/scripts/move_artifacts
+end_group
+
+start_group "Setting outputs"
+for output in "$outputs_dir"/*; do
+	{
+		printf '%s<<EOF\n' "${output##*/}"
+		cat -- "$output"
+		printf 'EOF\n'
+	} >>"$GITHUB_OUTPUT"
+done
 end_group
