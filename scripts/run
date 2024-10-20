@@ -47,6 +47,8 @@ check_path_prefix()
 
 clean_up()
 {
+	trap '' "$1"
+
 	start_group "Cleaning up"
 	if [ "${container_id-}" ]; then
 		docker stop --time=1 "$container_id" >/dev/null
@@ -58,8 +60,17 @@ clean_up()
 		unset build_dir
 	fi
 	end_group
+
+	trap - EXIT
+	if [ "$1" != EXIT ]; then
+		trap - "$1"
+		kill -s "$1" $$
+	fi
 }
-trap clean_up EXIT INT HUP TERM
+for sig in EXIT INT HUP TERM; do
+	# shellcheck disable=SC2064
+	trap "clean_up '$sig'" "$sig"
+done
 
 start_group "Preparing"
 build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX)
