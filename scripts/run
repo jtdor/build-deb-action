@@ -47,6 +47,7 @@ check_path_prefix()
 
 clean_up()
 {
+	start_group "Cleaning up"
 	if [ "${container_id-}" ]; then
 		docker stop --time=1 "$container_id" >/dev/null
 		unset container_id
@@ -56,6 +57,7 @@ clean_up()
 		rm --force --recursive -- "$build_dir"
 		unset build_dir
 	fi
+	end_group
 }
 trap clean_up EXIT INT HUP TERM
 
@@ -204,9 +206,4 @@ end_group
 
 start_group "Moving artifacts"
 in_container /github/action/scripts/move_artifacts
-end_group
-
-start_group "Cleaning up"
-clean_up
-trap - EXIT
 end_group
