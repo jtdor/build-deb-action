@@ -2,34 +2,8 @@
 
 set -eu
 
-# Usage:
-#   die EXIT_STATUS MESSAGE
-die()
-{
-	error "$2"
-	exit "$1"
-}
-
-# Usage:
-#   error MESSAGE
-error()
-{
-	echo "::error::$1"
-}
-
-# Usage:
-#   end_group
-end_group()
-{
-	echo "::endgroup::"
-}
-
-# Usage:
-#   start_group GROUP_NAME
-start_group()
-{
-	echo "::group::$1"
-}
+# shellcheck source=scripts/lib.sh
+. "${0%/*}/lib.sh"
 
 # Usage:
 #   check_path_prefix PATH PREFIX

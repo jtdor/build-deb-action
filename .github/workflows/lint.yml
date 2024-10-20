@@ -16,6 +16,7 @@ jobs:
         run: |
           n=0
           for f in scripts/*; do
+            [ "$f" != scripts/lib.sh ] || continue
             if [ -f "$f" ] && [ ! -x "$f" ]; then
               printf "'%s' is not executable\n" "$f" >&2
               n=1
