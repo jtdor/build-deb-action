@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -eu
+
+# shellcheck source=scripts/lib.sh
+. "${0%/*}/lib.sh"
+
+trap '' INT HUP TERM
+
+container_id_file=${BUILD_DIR}/container_id
+
+if [ -r "$container_id_file" ]; then
+	start_group "Stopping build container"
+	read -r container_id <"$container_id_file" || :
+	docker stop --time=1 "$container_id" >/dev/null || :
+	end_group
+fi
+
+start_group "Cleaning up"
+rm --force --recursive -- "$BUILD_DIR"
+end_group

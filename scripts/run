@@ -19,35 +19,10 @@ check_path_prefix()
 	return 1
 }
 
-clean_up()
-{
-	trap '' "$1"
-
-	start_group "Cleaning up"
-	if [ "${container_id-}" ]; then
-		docker stop --time=1 "$container_id" >/dev/null
-		unset container_id
-	fi
-
-	if [ "${build_dir-}" ]; then
-		rm --force --recursive -- "$build_dir"
-		unset build_dir
-	fi
-	end_group
-
-	trap - EXIT
-	if [ "$1" != EXIT ]; then
-		trap - "$1"
-		kill -s "$1" $$
-	fi
-}
-for sig in EXIT INT HUP TERM; do
-	# shellcheck disable=SC2064
-	trap "clean_up '$sig'" "$sig"
-done
-
 start_group "Preparing"
 build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX)
+printf 'build-dir=%s\n' "$build_dir" >>"$GITHUB_OUTPUT"
+
 env_file=$build_dir/env
 extra_repo_keys_file=$build_dir/build-deb-action.asc
 extra_repo_key_files_file=$build_dir/extra_repo_key_files
@@ -117,10 +92,12 @@ env \
 	--unset=INPUT_SETUP_HOOK \
 	>"$env_file"
 
+container_id_file=${build_dir}/container_id
 # shellcheck disable=SC2086
 container_id=$(
 	docker run \
 		$INPUT_EXTRA_DOCKER_ARGS \
+		--cidfile="$container_id_file" \
 		--detach \
 		--env-file="$env_file" \
 		--env=GITHUB_ACTION_PATH=/github/action \

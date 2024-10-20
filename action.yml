@@ -61,7 +61,13 @@ runs:
         INPUT_HOST_ARCH: ${{ inputs.host-arch }}
         INPUT_SETUP_HOOK: ${{ inputs.setup-hook }}
         INPUT_SOURCE_DIR: ${{ inputs.source-dir }}
+      id: run
       run: ${{ github.action_path }}/scripts/run
+      shell: bash
+    - env:
+        BUILD_DIR: ${{ steps.run.outputs.build-dir }}
+      if: ${{ always() && steps.run.outputs.build-dir != '' }}
+      run: ${{ github.action_path }}/scripts/post
       shell: bash
 branding:
   color: red
