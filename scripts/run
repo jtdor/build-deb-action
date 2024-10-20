@@ -59,6 +59,7 @@ clean_up()
 }
 trap clean_up EXIT INT HUP TERM
 
+start_group "Preparing"
 build_dir=$(mktemp --directory --tmpdir="${RUNNER_TEMP-}" build-deb-action-XXXXXX)
 env_file=$build_dir/env
 extra_repo_keys_file=$build_dir/build-deb-action.asc
@@ -102,6 +103,7 @@ if [ "$INPUT_EXTRA_REPO_KEYS" ]; then
 		printf '/github/build/%s\n' "${extra_repo_keys_file##*/}" >"$extra_repo_key_files_file"
 	fi
 fi
+end_group
 
 if [ -f "$INPUT_DOCKER_IMAGE" ]; then
 	if ! check_path_prefix "$INPUT_DOCKER_IMAGE" "$GITHUB_WORKSPACE"; then
