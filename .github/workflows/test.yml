@@ -84,6 +84,25 @@ jobs:
           test -f my_artifacts/test_1_amd64.buildinfo
           test -f my_artifacts/test_1_amd64.changes
 
+  different-checkout-dir:
+    needs: [single-package]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: action
+      - uses: ./action
+        env:
+          DEB_BUILD_OPTIONS: noautodbgsym
+        with:
+          buildpackage-opts: --build=binary --no-sign
+          source-dir: action/test
+      - run: |
+          dpkg --info debian/artifacts/test_1_amd64.deb
+          dpkg --contents debian/artifacts/test_1_amd64.deb | grep ./usr/bin/mybin
+          test -f debian/artifacts/test_1_amd64.buildinfo
+          test -f debian/artifacts/test_1_amd64.changes
+
   different-docker-image:
     needs: [single-package]
     runs-on: ubuntu-latest
