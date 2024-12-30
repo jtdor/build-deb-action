@@ -1,5 +1,28 @@
 # Build Debian Packages GitHub Action: Changelog
 
+## Version 1.9.0
+
+### Features
+
+- Added the [output parameter `artifacts`](README.md#artifacts)
+- Added an early check ensuring that the used Docker container is
+  Debian-based
+
+### Improvements
+
+- Ensured that clean-up happens even when the build (or something else)
+  fails
+- Moved preparatory and clean-up steps into their own log groups
+- Minor improvements and additions to the internal testing and linting
+  workflows
+
+### Documentation
+
+- Added a note that this actions builds readily “debianized” sources
+- Clarified the [description](README.md#host-arch) of the cross-build
+  support
+- Renamed the section “Inputs” to “Input Parameters”
+
 ## Version 1.8.0
 
 ### Features
