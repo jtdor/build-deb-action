@@ -5,6 +5,7 @@ on:
   push:
     paths-ignore:
       - .github/workflows/lint.yml
+      - CHANGELOG.md
       - LICENSE
       - README.md
 
