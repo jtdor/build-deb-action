@@ -1,0 +1,4 @@
+
+.PHONY: test
+test:
+	apt-cache policy | grep -B3 'origin deb.debian.org' | grep -q '900'

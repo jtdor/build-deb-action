@@ -101,6 +101,7 @@ env \
 	--unset=INPUT_BEFORE_BUILD_HOOK \
 	--unset=INPUT_EXTRA_REPO_KEYS \
 	--unset=INPUT_EXTRA_REPOS \
+	--unset=INPUT_EXTRA_APT_PREFERENCES \
 	--unset=INPUT_SETUP_HOOK \
 	>"$env_file"
 
@@ -115,6 +116,7 @@ container_id=$(
 		--env=GITHUB_ACTION_PATH=/github/action \
 		--env=GITHUB_WORKSPACE=/github/workspace \
 		--env=INPUT_EXTRA_REPOS \
+		--env=INPUT_EXTRA_APT_PREFERENCES \
 		--mount="type=bind,src=${GITHUB_ACTION_PATH},dst=/github/action,ro" \
 		--mount="type=bind,src=${build_dir},dst=/github/build" \
 		--mount="type=bind,src=${GITHUB_WORKSPACE},dst=/github/workspace" \

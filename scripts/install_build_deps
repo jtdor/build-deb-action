@@ -31,6 +31,8 @@ else
 fi
 printf "%s\n" "$INPUT_EXTRA_REPOS" >"/etc/apt/sources.list.d/build-deb-action${extra_repos_ext}"
 
+printf "%s\n" "$INPUT_EXTRA_APT_PREFERENCES" > "/etc/apt/preferences.d/extra-preferences.pref"
+
 apt-get update
 
 # shellcheck disable=SC2086
