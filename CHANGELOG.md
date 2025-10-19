@@ -1,5 +1,14 @@
 # Build Debian Packages GitHub Action: Changelog
 
+## Version 1.9.1
+
+### Fixes
+
+- Do not fail unexpectedly and unnecessarily with older APT versions
+  when no `extra-repos` is given
+  ([\#15](https://github.com/jtdor/build-deb-action/pull/15), thanks
+  @funzoneq)
+
 ## Version 1.9.0
 
 ### Features
