@@ -34,6 +34,8 @@ if [ -n "$INPUT_EXTRA_REPOS" ]; then
 fi
 
 
+printf "%s\n" "$INPUT_EXTRA_APT_PREFERENCES" > "/etc/apt/preferences.d/extra-preferences.pref"
+
 apt-get update
 
 # shellcheck disable=SC2086

@@ -32,6 +32,9 @@ inputs:
   extra-repos:
     description: Extra APT repositories to configure in the build environment (one-line-style or deb822-style format)
     required: false
+  extra-apt-preferences:
+    description: Extra APT preferences fragments file to configure the priorities between multiple feeds
+    required: false
   host-arch:
     description: Foreign architecture to setup cross-building for
     required: false
@@ -63,6 +66,7 @@ runs:
         INPUT_EXTRA_DOCKER_ARGS: ${{ inputs.extra-docker-args }}
         INPUT_EXTRA_REPO_KEYS: ${{  inputs.extra-repo-keys }}
         INPUT_EXTRA_REPOS: ${{  inputs.extra-repos }}
+        INPUT_EXTRA_APT_PREFERENCES: ${{  inputs.extra-apt-preferences }}
         INPUT_HOST_ARCH: ${{ inputs.host-arch }}
         INPUT_SETUP_HOOK: ${{ inputs.setup-hook }}
         INPUT_SOURCE_DIR: ${{ inputs.source-dir }}
